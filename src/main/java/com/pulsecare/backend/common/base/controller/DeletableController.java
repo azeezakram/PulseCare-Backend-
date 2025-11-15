@@ -2,6 +2,6 @@ package com.pulsecare.backend.common.base.controller;
 
 import org.springframework.http.ResponseEntity;
 
-public interface DeletableController<T, R> {
-    ResponseEntity<R> delete(T id);
+public interface DeletableController<R, ID> {
+    ResponseEntity<R> delete(ID id);
 }

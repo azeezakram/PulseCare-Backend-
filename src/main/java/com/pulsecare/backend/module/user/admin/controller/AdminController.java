@@ -11,5 +11,5 @@ import com.pulsecare.backend.module.user.admin.dto.AdminResponseDTO;
 public interface AdminController extends FindableController<ResponseBody<AdminResponseDTO>, String>,
         CreatableController<AdminRequestDTO, ResponseBody<AdminResponseDTO>>,
         UpdatableController<AdminRequestDTO, ResponseBody<AdminResponseDTO>>,
-        DeletableController<ResponseBody<AdminResponseDTO>, String> {
+        DeletableController<ResponseBody<Byte>, String> {
 }
