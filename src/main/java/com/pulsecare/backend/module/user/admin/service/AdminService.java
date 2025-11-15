@@ -7,7 +7,8 @@ import com.pulsecare.backend.common.base.service.UpdatableService;
 import com.pulsecare.backend.module.user.admin.dto.AdminRequestDTO;
 import com.pulsecare.backend.module.user.admin.dto.AdminResponseDTO;
 
-public interface AdminService extends FindableService<String, AdminResponseDTO>,
+public interface AdminService extends
+        FindableService<String, AdminResponseDTO>,
         CreatableService<AdminRequestDTO, AdminResponseDTO>,
         UpdatableService<AdminRequestDTO, AdminResponseDTO>,
         DeletableService<Byte, String> {
