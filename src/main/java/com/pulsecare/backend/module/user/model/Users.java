@@ -1,6 +1,7 @@
 package com.pulsecare.backend.module.user.model;
 
 import com.pulsecare.backend.module.role.model.Role;
+import com.pulsecare.backend.module.user.module.doctordetail.model.DoctorDetail;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -62,5 +63,8 @@ public class Users {
     )
     @ToString.Exclude
     private Set<Role> roles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private DoctorDetail doctorDetails;
 
 }
