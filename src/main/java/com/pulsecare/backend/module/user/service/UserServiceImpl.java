@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.user.service;
 
+import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
@@ -34,4 +35,8 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public UserResponseDTO login(LoginRequestDTO data) {
+        return null;
+    }
 }
