@@ -9,6 +9,10 @@ import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
@@ -20,15 +24,22 @@ public class DepartmentServiceImpl implements DepartmentService {
         this.repository = repository;
     }
 
-
     @Override
     public DeptResponseDTO findById(String id) {
         return null;
     }
 
     @Override
-    public DeptResponseDTO findAll() {
-        return null;
+    public List<DeptResponseDTO> findAll() {
+        List<Department> departments = repository.findAll();
+
+        if (departments.isEmpty()) {
+            return List.of();
+        }
+
+        return departments.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     @Override

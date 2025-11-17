@@ -4,6 +4,8 @@ import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -13,7 +15,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO findAll() {
+    public List<UserResponseDTO> findAll() {
         return null;
     }
 

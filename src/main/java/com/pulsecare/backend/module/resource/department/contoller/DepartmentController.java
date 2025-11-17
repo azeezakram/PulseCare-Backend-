@@ -15,8 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 public interface DepartmentController extends
-        FindableController<ResponseBody<DeptResponseDTO>, Integer>,
+        FindableController<ResponseBody<DeptResponseDTO>, ResponseBody<List<DeptResponseDTO>>, Integer>,
         CreatableController<DeptRequestDTO, ResponseBody<DeptResponseDTO>>,
         UpdatableController<DeptRequestDTO, ResponseBody<DeptResponseDTO>>,
         DeletableController<ResponseBody<Byte>, Integer> {

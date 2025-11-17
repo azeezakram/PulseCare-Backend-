@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -32,8 +33,27 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @GetMapping("/")
-    public ResponseEntity<ResponseBody<DeptResponseDTO>> findAll() {
-        return null;
+    public ResponseEntity<ResponseBody<List<DeptResponseDTO>>> findAll() {
+        try {
+            List<DeptResponseDTO> created = service.findAll();
+
+            return ResponseEntity
+                    .ok()
+                    .body(new ResponseBody<>(
+                            HttpStatus.OK.value(),
+                            created.isEmpty() ? "No data to fetched" : "Department data successfully fetched",
+                            created
+                    ));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body(new ResponseBody<>(
+                            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                            "Internal server error: " + e.getMessage(),
+                            null
+                    ));
+        }
     }
 
     @Override

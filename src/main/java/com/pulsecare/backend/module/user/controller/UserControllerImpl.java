@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -20,7 +22,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @GetMapping("/")
-    public ResponseEntity<ResponseBody<UserResponseDTO>> findAll() {
+    public ResponseEntity<ResponseBody<List<UserResponseDTO>>> findAll() {
         return null;
     }
 

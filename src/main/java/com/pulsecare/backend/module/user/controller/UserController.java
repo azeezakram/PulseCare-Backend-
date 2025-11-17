@@ -8,8 +8,10 @@ import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 
+import java.util.List;
+
 public interface UserController extends
-        FindableController<ResponseBody<UserResponseDTO>, String>,
+        FindableController<ResponseBody<UserResponseDTO>, ResponseBody<List<UserResponseDTO>>, String>,
         CreatableController<UserRequestDTO, ResponseBody<UserResponseDTO>>,
         UpdatableController<UserRequestDTO, ResponseBody<UserResponseDTO>>,
         DeletableController<ResponseBody<Byte>, String> {
