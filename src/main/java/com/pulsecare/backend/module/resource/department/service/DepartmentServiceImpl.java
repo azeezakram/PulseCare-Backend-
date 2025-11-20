@@ -4,13 +4,9 @@ import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
 import com.pulsecare.backend.module.resource.department.mapper.DepartmentMapper;
 import com.pulsecare.backend.module.resource.department.model.Department;
-import com.pulsecare.backend.module.resource.department.repo.DepartmentRepository;
-import com.pulsecare.backend.module.user.dto.UserRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserResponseDTO;
+import com.pulsecare.backend.module.resource.department.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

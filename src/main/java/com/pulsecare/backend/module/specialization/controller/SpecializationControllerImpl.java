@@ -8,6 +8,7 @@ import com.pulsecare.backend.module.resource.department.service.DepartmentServic
 import com.pulsecare.backend.module.specialization.dto.SpecializationReqDTO;
 import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
 import com.pulsecare.backend.module.specialization.service.SpecializationService;
+import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,18 @@ public class SpecializationControllerImpl implements SpecializationController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseBody<SpecializationResDTO>> create(@Valid @RequestBody SpecializationReqDTO data, BindingResult result) {
-        return null;
+        if (result.hasErrors()) {
+            throw new ValidationException(result);
+        }
+        SpecializationResDTO created = service.create(data);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Specialization created successfully",
+                        created
+                ));
     }
 
     @Override
