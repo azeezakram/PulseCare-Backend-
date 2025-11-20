@@ -2,13 +2,9 @@ package com.pulsecare.backend.module.specialization.controller;
 
 import com.pulsecare.backend.common.exception.ValidationException;
 import com.pulsecare.backend.common.template.response.ResponseBody;
-import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
-import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
-import com.pulsecare.backend.module.resource.department.service.DepartmentService;
 import com.pulsecare.backend.module.specialization.dto.SpecializationReqDTO;
 import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
 import com.pulsecare.backend.module.specialization.service.SpecializationService;
-import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +64,6 @@ public class SpecializationControllerImpl implements SpecializationController {
             throw new ValidationException(result);
         }
         SpecializationResDTO created = service.create(data);
-
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
@@ -81,8 +76,19 @@ public class SpecializationControllerImpl implements SpecializationController {
     @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseBody<SpecializationResDTO>> update(@Valid @PathVariable("id") Integer id, @RequestBody SpecializationReqDTO data, BindingResult result) {
-        return null;
+    public ResponseEntity<ResponseBody<SpecializationResDTO>> update(@Valid @PathVariable("id") Integer id,
+                                                                     @RequestBody SpecializationReqDTO data, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new ValidationException(result);
+        }
+        SpecializationResDTO updated = service.update(id, data);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Specialization updated successfully",
+                        updated
+                ));
     }
 
     @Override
