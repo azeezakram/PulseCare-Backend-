@@ -51,15 +51,18 @@ public class SpecializationServiceImpl implements SpecializationService {
         return mapper.toDTO(entity);
     }
 
+    @Override
+    public SpecializationResDTO update(Integer id, SpecializationReqDTO data) {
+        Specialization existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Id with " + id + " Specialization Not found"));
 
+        existing.setName(data.name());
+        Specialization updated = repository.save(existing);
+        return mapper.toDTO(updated);
+    }
 
     @Override
     public Byte delete(Integer id) {
         return 0;
-    }
-
-    @Override
-    public SpecializationResDTO update(Integer integer, SpecializationReqDTO data) {
-        return null;
     }
 }
