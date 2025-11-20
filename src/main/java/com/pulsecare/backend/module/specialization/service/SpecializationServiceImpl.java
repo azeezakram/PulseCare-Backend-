@@ -63,7 +63,11 @@ public class SpecializationServiceImpl implements SpecializationService {
 
     @Override
     public void delete(Integer id) {
+        Specialization entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Specialization not found"));
 
+        repository.delete(entity);
     }
+
 
 }
