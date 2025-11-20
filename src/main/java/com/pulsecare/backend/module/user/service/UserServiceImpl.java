@@ -44,10 +44,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public UserResponseDTO update(UserRequestDTO data) {
-        return null;
-    }
+
 
     @Override
     public Byte delete(String id) {
@@ -74,5 +71,10 @@ public class UserServiceImpl implements UserService {
         } catch (AuthenticationException e) {
             throw new UserInvalidCredentialException("Invalid username or password");
         }
+    }
+
+    @Override
+    public UserResponseDTO update(String s, UserRequestDTO data) {
+        return null;
     }
 }

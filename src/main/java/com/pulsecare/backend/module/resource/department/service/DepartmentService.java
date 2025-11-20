@@ -12,6 +12,6 @@ import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 public interface DepartmentService extends
         FindableService<String, DeptResponseDTO>,
         CreatableService<DeptRequestDTO, DeptResponseDTO>,
-        UpdatableService<DeptRequestDTO, DeptResponseDTO>,
+        UpdatableService<DeptRequestDTO, DeptResponseDTO, Integer>,
         DeletableService<Integer, Byte> {
 }

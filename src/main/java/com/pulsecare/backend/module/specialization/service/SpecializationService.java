@@ -10,6 +10,6 @@ import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
 public interface SpecializationService extends
         FindableService<Integer, SpecializationResDTO>,
         CreatableService<SpecializationReqDTO, SpecializationResDTO>,
-        UpdatableService<SpecializationReqDTO, SpecializationResDTO>,
+        UpdatableService<SpecializationReqDTO, SpecializationResDTO, Integer>,
         DeletableService<Integer, Byte> {
 }

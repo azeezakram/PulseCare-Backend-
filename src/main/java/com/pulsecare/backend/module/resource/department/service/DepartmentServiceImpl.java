@@ -45,13 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DeptResponseDTO create(DeptRequestDTO data) {
         Department department = mapper.toEntity(data);
-        System.out.println(department);
         return mapper.toDTO(repository.save(department));
-    }
-
-    @Override
-    public DeptResponseDTO update(DeptRequestDTO data) {
-        return null;
     }
 
     @Override
@@ -59,5 +53,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         return 0;
     }
 
-
+    @Override
+    public DeptResponseDTO update(Integer integer, DeptRequestDTO data) {
+        return null;
+    }
 }

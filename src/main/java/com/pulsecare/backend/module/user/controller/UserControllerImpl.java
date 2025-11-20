@@ -6,6 +6,7 @@ import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import com.pulsecare.backend.module.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,9 +63,10 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @PutMapping("/")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
-    public ResponseEntity<ResponseBody<UserResponseDTO>> update(@RequestBody UserRequestDTO data, BindingResult result) {
+    public ResponseEntity<ResponseBody<UserResponseDTO>> update(
+            @Valid @PathVariable("id") String id, @RequestBody UserRequestDTO data, BindingResult result) {
         return null;
     }
 

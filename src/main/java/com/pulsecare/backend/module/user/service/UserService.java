@@ -8,7 +8,7 @@ import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 public interface UserService extends
         FindableService<String, UserResponseDTO>,
         CreatableService<UserRequestDTO, UserResponseDTO>,
-        UpdatableService<UserRequestDTO, UserResponseDTO>,
+        UpdatableService<UserRequestDTO, UserResponseDTO, String>,
         DeletableService<String, Byte>,
         LoggableService<LoginRequestDTO, String> {
 }

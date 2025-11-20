@@ -51,14 +51,15 @@ public class SpecializationServiceImpl implements SpecializationService {
         return mapper.toDTO(entity);
     }
 
-    @Override
-    public SpecializationResDTO update(SpecializationReqDTO data) {
-        return null;
-    }
+
 
     @Override
     public Byte delete(Integer id) {
         return 0;
     }
 
+    @Override
+    public SpecializationResDTO update(Integer integer, SpecializationReqDTO data) {
+        return null;
+    }
 }

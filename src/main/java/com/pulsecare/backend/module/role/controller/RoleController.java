@@ -15,6 +15,6 @@ import java.util.List;
 public interface RoleController extends
         FindableController<ResponseBody<RoleResDto>, ResponseBody<List<RoleResDto>>, Integer>,
         CreatableController<RoleReqDto, ResponseBody<RoleResDto>>,
-        UpdatableController<RoleReqDto, ResponseBody<RoleResDto>>,
+        UpdatableController<RoleReqDto, ResponseBody<RoleResDto>, Integer>,
         DeletableController<ResponseBody<Byte>, Integer> {
 }

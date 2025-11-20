@@ -10,6 +10,6 @@ import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 public interface RoleService extends
         FindableService<Integer, RoleResDto>,
         CreatableService<RoleReqDto, RoleResDto>,
-        UpdatableService<RoleReqDto, RoleResDto>,
+        UpdatableService<RoleReqDto, RoleResDto, Integer>,
         DeletableService<Integer, Byte> {
 }

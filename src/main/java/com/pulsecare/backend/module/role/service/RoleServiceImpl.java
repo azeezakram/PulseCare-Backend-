@@ -34,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResDto update(RoleReqDto data) {
+    public RoleResDto update(Integer integer, RoleReqDto data) {
         return null;
     }
 }
