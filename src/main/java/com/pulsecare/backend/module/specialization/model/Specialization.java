@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "specializations")
+@Table(name = "specialization")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
