@@ -13,5 +13,5 @@ public interface DepartmentService extends
         FindableService<String, DeptResponseDTO>,
         CreatableService<DeptRequestDTO, DeptResponseDTO>,
         UpdatableService<DeptRequestDTO, DeptResponseDTO, Integer>,
-        DeletableService<Integer, Byte> {
+        DeletableService<Integer> {
 }

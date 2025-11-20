@@ -9,6 +9,6 @@ public interface UserService extends
         FindableService<String, UserResponseDTO>,
         CreatableService<UserRequestDTO, UserResponseDTO>,
         UpdatableService<UserRequestDTO, UserResponseDTO, String>,
-        DeletableService<String, Byte>,
+        DeletableService<String>,
         LoggableService<LoginRequestDTO, String> {
 }

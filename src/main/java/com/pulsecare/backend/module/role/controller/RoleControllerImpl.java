@@ -73,7 +73,7 @@ public class RoleControllerImpl implements RoleController {
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseBody<Byte>> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseBody<String>> delete(@PathVariable("id") Integer id) {
         return null;
     }
 

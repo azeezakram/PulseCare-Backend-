@@ -62,7 +62,8 @@ public class SpecializationServiceImpl implements SpecializationService {
     }
 
     @Override
-    public Byte delete(Integer id) {
-        return 0;
+    public void delete(Integer id) {
+
     }
+
 }

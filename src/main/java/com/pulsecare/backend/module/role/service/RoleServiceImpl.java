@@ -19,8 +19,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Byte delete(Integer id) {
-        return 0;
+    public void delete(Integer id) {
+        // TODO document why this method is empty
     }
 
     @Override

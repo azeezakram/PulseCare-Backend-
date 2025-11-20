@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Byte delete(String id) {
-        return null;
+    public void delete(String id) {
+        // TODO document why this method is empty
     }
 
     @Override

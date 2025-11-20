@@ -11,5 +11,5 @@ public interface RoleService extends
         FindableService<Integer, RoleResDto>,
         CreatableService<RoleReqDto, RoleResDto>,
         UpdatableService<RoleReqDto, RoleResDto, Integer>,
-        DeletableService<Integer, Byte> {
+        DeletableService<Integer> {
 }

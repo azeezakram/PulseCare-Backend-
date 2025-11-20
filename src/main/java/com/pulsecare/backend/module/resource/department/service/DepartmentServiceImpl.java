@@ -49,8 +49,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Byte delete(Integer id) {
-        return 0;
+    public void delete(Integer id) {
+        // TODO document why this method is empty
     }
 
     @Override

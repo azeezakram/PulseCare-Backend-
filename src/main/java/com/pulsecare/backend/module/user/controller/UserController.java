@@ -12,6 +12,6 @@ public interface UserController extends
         FindableController<ResponseBody<UserResponseDTO>, ResponseBody<List<UserResponseDTO>>, String>,
         CreatableController<UserRequestDTO, ResponseBody<UserResponseDTO>>,
         UpdatableController<UserRequestDTO, ResponseBody<UserResponseDTO>, String>,
-        DeletableController<ResponseBody<Byte>, String>,
+        DeletableController<ResponseBody<String>, String>,
         LoggableController<LoginRequestDTO, ResponseBody<String>> {
 }

@@ -11,5 +11,5 @@ public interface SpecializationService extends
         FindableService<Integer, SpecializationResDTO>,
         CreatableService<SpecializationReqDTO, SpecializationResDTO>,
         UpdatableService<SpecializationReqDTO, SpecializationResDTO, Integer>,
-        DeletableService<Integer, Byte> {
+        DeletableService<Integer> {
 }

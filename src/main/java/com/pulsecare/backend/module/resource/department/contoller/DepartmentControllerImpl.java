@@ -74,7 +74,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseBody<Byte>> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseBody<String>> delete(@PathVariable("id") Integer id) {
         return null;
     }
 }

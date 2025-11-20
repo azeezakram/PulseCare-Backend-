@@ -73,7 +73,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseBody<Byte>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<ResponseBody<String>> delete(@PathVariable("id") String id) {
         return null;
     }
 

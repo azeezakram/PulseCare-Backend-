@@ -21,5 +21,5 @@ public interface DepartmentController extends
         FindableController<ResponseBody<DeptResponseDTO>, ResponseBody<List<DeptResponseDTO>>, Integer>,
         CreatableController<DeptRequestDTO, ResponseBody<DeptResponseDTO>>,
         UpdatableController<DeptRequestDTO, ResponseBody<DeptResponseDTO>, Integer>,
-        DeletableController<ResponseBody<Byte>, Integer> {
+        DeletableController<ResponseBody<String>, Integer> {
 }
