@@ -3,7 +3,7 @@ package com.pulsecare.backend.advisor;
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.common.exception.ValidationException;
-import com.pulsecare.backend.common.template.response.ResponseBody;
+import com.pulsecare.backend.common.template.response.ErrorResponseBody;
 import com.pulsecare.backend.module.user.exception.UserInvalidCredentialException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ResponseBody<Object>> handleValidationError(ValidationException ex) {
-
+    public ResponseEntity<ErrorResponseBody> handleValidationError(ValidationException ex) {
         String errors = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
@@ -26,21 +25,18 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
 
         return ResponseEntity.badRequest().body(
-                new ResponseBody<>(
+                new ErrorResponseBody(
                         HttpStatus.BAD_REQUEST.value(),
-                        errors,
-                        null
+                        errors
                 )
         );
     }
 
     @ExceptionHandler(UserInvalidCredentialException.class)
-    public ResponseEntity<ResponseBody<Object>> handleUserInvalidCredentialException(UserInvalidCredentialException ex) {
-
+    public ResponseEntity<ErrorResponseBody> handleUserInvalidCredentialException(UserInvalidCredentialException ex) {
         return new ResponseEntity<>(
-                new ResponseBody<>(
+                new ErrorResponseBody(
                         HttpStatus.UNAUTHORIZED.value(),
-                        "Invalid Credentials: " + ex.getMessage(),
                         ex.getMessage()
                 ),
                 HttpStatus.UNAUTHORIZED
@@ -49,41 +45,38 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ResponseBody<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ResponseEntity<ErrorResponseBody> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(
-                new ResponseBody<>(
-                        HttpStatus.NO_CONTENT.value(),
-                        "Resource Not Found: " + ex.getMessage(),
-                        ex.getMessage()
-                )
-        );
-    }
-
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ResponseBody<Object>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(
-                        new ResponseBody<>(
-                                HttpStatus.CONFLICT.value(),
-                                "Resource Already Exist: " + ex.getMessage(),
+                        new ErrorResponseBody(
+                                HttpStatus.NO_CONTENT.value(),
                                 ex.getMessage()
                         )
                 );
     }
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseBody> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(
+                        new ErrorResponseBody(
+                                HttpStatus.CONFLICT.value(),
+                                ex.getMessage()
+                        )
+                );
+    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseBody<Object>> handleServerError(Exception ex) {
+    public ResponseEntity<ErrorResponseBody> handleServerError(Exception ex) {
 
-        return ResponseEntity.internalServerError().body(
-                new ResponseBody<>(
-                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        "Internal Server Error: " + ex.getMessage(),
-                        null
-                )
-        );
+        return ResponseEntity.internalServerError()
+                .body(
+                        new ErrorResponseBody(
+                                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                                ex.getMessage()
+                        )
+                );
     }
 }
