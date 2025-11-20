@@ -48,7 +48,15 @@ public class SpecializationControllerImpl implements SpecializationController {
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<SpecializationResDTO>>> findAll() {
-        return null;
+        List<SpecializationResDTO> data = service.findAll();
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        data.isEmpty() ? "No data to fetched" : "Specialization data fetched successfully",
+                        data
+                ));
     }
 
     @Override

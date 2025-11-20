@@ -35,14 +35,14 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @GetMapping("/")
     public ResponseEntity<ResponseBody<List<DeptResponseDTO>>> findAll() {
-        List<DeptResponseDTO> created = service.findAll();
+        List<DeptResponseDTO> data = service.findAll();
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        created.isEmpty() ? "No data to fetched" : "Department data successfully fetched",
-                        created
+                        data.isEmpty() ? "No data to fetched" : "Department data successfully fetched",
+                        data
                 ));
     }
 
