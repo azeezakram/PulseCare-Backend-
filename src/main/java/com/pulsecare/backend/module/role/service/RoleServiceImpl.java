@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.role.service;
 
+import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.role.dto.RoleReqDto;
 import com.pulsecare.backend.module.role.dto.RoleResDto;
@@ -45,7 +46,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResDto create(RoleReqDto data) {
-        return null;
+        repository.findByName(data.name())
+                .ifPresent(s -> {
+                    throw new ResourceAlreadyExistsException("Role with this name already exists");
+                });
+        Role entity = repository.save(mapper.toEntity(data));
+        return mapper.toDTO(entity);
     }
 
     @Override
