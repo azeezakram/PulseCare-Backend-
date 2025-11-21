@@ -1,6 +1,5 @@
 package com.pulsecare.backend.module.resource.department.contoller;
 
-import com.pulsecare.backend.common.exception.ValidationException;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
@@ -8,7 +7,6 @@ import com.pulsecare.backend.module.resource.department.service.DepartmentServic
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,14 +46,8 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @PostMapping("/")
-    public ResponseEntity<ResponseBody<DeptResponseDTO>> create(@RequestBody DeptRequestDTO data, BindingResult result) {
-
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
-
+    public ResponseEntity<ResponseBody<DeptResponseDTO>> create(@RequestBody DeptRequestDTO data) {
         DeptResponseDTO created = service.create(data);
-
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
@@ -68,7 +60,7 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> update(
-            @Valid @PathVariable("id") Integer id, @RequestBody DeptRequestDTO data, BindingResult result) {
+            @Valid @PathVariable("id") Integer id, @RequestBody DeptRequestDTO data) {
         return null;
     }
 

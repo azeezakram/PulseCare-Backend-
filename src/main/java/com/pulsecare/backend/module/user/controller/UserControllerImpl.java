@@ -1,6 +1,5 @@
 package com.pulsecare.backend.module.user.controller;
 
-import com.pulsecare.backend.common.exception.ValidationException;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserRequestDTO;
@@ -10,7 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,12 +43,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseBody<UserResponseDTO>> create(@RequestBody UserRequestDTO data, BindingResult result) {
-
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
-
+    public ResponseEntity<ResponseBody<UserResponseDTO>> create(@RequestBody UserRequestDTO data) {
         UserResponseDTO created = userService.create(data);
 
         return ResponseEntity
@@ -66,7 +59,7 @@ public class UserControllerImpl implements UserController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<UserResponseDTO>> update(
-            @Valid @PathVariable("id") String id, @RequestBody UserRequestDTO data, BindingResult result) {
+            @Valid @PathVariable("id") String id, @RequestBody UserRequestDTO data) {
         return null;
     }
 
@@ -79,11 +72,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<ResponseBody<String>> login(@RequestBody LoginRequestDTO data, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
-
+    public ResponseEntity<ResponseBody<String>> login(@RequestBody LoginRequestDTO data) {
         String token = userService.login(data);
 
         return ResponseEntity

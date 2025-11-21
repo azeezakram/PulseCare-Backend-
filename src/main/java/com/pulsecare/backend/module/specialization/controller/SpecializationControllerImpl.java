@@ -1,6 +1,5 @@
 package com.pulsecare.backend.module.specialization.controller;
 
-import com.pulsecare.backend.common.exception.ValidationException;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.specialization.dto.SpecializationReqDTO;
 import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
@@ -9,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,10 +57,7 @@ public class SpecializationControllerImpl implements SpecializationController {
     @Override
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseBody<SpecializationResDTO>> create(@Valid @RequestBody SpecializationReqDTO data, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
+    public ResponseEntity<ResponseBody<SpecializationResDTO>> create(@Valid @RequestBody SpecializationReqDTO data) {
         SpecializationResDTO created = service.create(data);
         return ResponseEntity
                 .ok()
@@ -77,10 +72,7 @@ public class SpecializationControllerImpl implements SpecializationController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseBody<SpecializationResDTO>> update(@Valid @PathVariable("id") Integer id,
-                                                                     @RequestBody SpecializationReqDTO data, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
+                                                                     @RequestBody SpecializationReqDTO data) {
         SpecializationResDTO updated = service.update(id, data);
         return ResponseEntity
                 .ok()
