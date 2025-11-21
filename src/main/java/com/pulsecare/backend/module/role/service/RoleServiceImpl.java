@@ -7,10 +7,6 @@ import com.pulsecare.backend.module.role.dto.RoleResDto;
 import com.pulsecare.backend.module.role.mapper.RoleMapper;
 import com.pulsecare.backend.module.role.model.Role;
 import com.pulsecare.backend.module.role.repository.RoleRepository;
-import com.pulsecare.backend.module.specialization.model.Specialization;
-import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,6 +61,9 @@ public class RoleServiceImpl implements RoleService {
     }
     @Override
     public void delete(Integer id) {
+        Role entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
+        repository.delete(entity);
     }
 }
