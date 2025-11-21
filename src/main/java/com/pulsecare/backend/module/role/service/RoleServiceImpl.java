@@ -37,7 +37,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleResDto> findAll() {
-        return List.of();
+        List<Role> data = repository.findAll();
+        return data.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     @Override
