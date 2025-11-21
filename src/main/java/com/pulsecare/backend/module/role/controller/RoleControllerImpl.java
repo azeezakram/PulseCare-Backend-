@@ -21,18 +21,24 @@ import java.util.List;
 @Validated
 public class RoleControllerImpl implements RoleController {
 
-    private final RoleService roleService;
+    private final RoleService service;
 
     public RoleControllerImpl(RoleService userService) {
-        this.roleService = userService;
+        this.service = userService;
     }
-
 
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<RoleResDto>> findById(@PathVariable("id") Integer id) {
-        return null;
+        RoleResDto data = service.findById(id);
+        return ResponseEntity.ok().body(
+                new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Role fetched successfully",
+                        data
+                )
+        );
     }
 
     @Override
@@ -51,7 +57,7 @@ public class RoleControllerImpl implements RoleController {
             throw new ValidationException(result);
         }
 
-        RoleResDto created = roleService.create(data);
+        RoleResDto created = service.create(data);
 
         return ResponseEntity
                 .ok()
