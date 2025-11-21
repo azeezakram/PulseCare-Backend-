@@ -19,7 +19,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository repository;
     private final RoleMapper mapper;
 
-    public RoleServiceImpl(RoleRepository repository, @Qualifier("roleMapper") RoleMapper mapper) {
+    public RoleServiceImpl(RoleRepository repository, @Qualifier("roleMapperImpl") RoleMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
