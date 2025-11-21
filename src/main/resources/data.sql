@@ -2,10 +2,10 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Insert roles
-INSERT INTO role (name)
-VALUES ('ROLE_ADMIN'),
-       ('ROLE_DOCTOR'),
-       ('ROLE_NURSE');
+INSERT INTO role (name, created_at, updated_at)
+VALUES ('ROLE_ADMIN', now(), now()),
+       ('ROLE_DOCTOR', now(), now()),
+       ('ROLE_NURSE', now(), now());
 INSERT INTO department (name, created_at, updated_at)
 VALUES ('Cardiology', now(), now()),
        ('Neurology', now(), now()),
