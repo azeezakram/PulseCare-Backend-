@@ -15,7 +15,7 @@ public record UserResponseDTO(
         String email,
         String mobileNumber,
 
-        Set<Role> roles,          // ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE
+        Set<Role> roles,
 
         String imageUrl,            // "/api/v1/user/{id}/image"
 
