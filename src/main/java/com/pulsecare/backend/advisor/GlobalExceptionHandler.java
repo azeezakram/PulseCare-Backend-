@@ -2,12 +2,12 @@ package com.pulsecare.backend.advisor;
 
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
-import com.pulsecare.backend.common.exception.ValidationException;
 import com.pulsecare.backend.common.template.response.ErrorResponseBody;
 import com.pulsecare.backend.module.user.exception.UserInvalidCredentialException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponseBody> handleValidationError(ValidationException ex) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseBody> handleValidationError(MethodArgumentNotValidException ex) {
         String errors = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
