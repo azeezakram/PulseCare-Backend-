@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.doctordetail.service;
 
+import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailReqDto;
 import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailResDto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DoctorDetailServiceImpl implements DoctorDetailService {
@@ -43,7 +45,12 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
 
     @Override
     public DoctorDetailResDto create(DoctorDetailReqDto data) {
-        return null;
+        repository.findByUserIdAndLicenseNo(UUID.fromString(data.userId()), data.licenseNo())
+                .ifPresent(s -> {
+                    throw new ResourceAlreadyExistsException("Doctor detail with this User ID or License No already exists");
+                });
+        DoctorDetail entity = repository.save(mapper.toEntity(data));
+        return mapper.toDTO(entity);
     }
 
     @Override
