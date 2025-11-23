@@ -1,8 +1,9 @@
 package com.pulsecare.backend.module.user.dto;
 
-import com.pulsecare.backend.module.role.dto.RoleResDto;
+import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailReqDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Set;
 
 public record UserRequestDTO(
@@ -24,6 +25,10 @@ public record UserRequestDTO(
         String mobileNumber,
 
         @NotNull(message = "Roles must be provided")
-        Set<RoleResDto> roles
+        Set<Integer> roles,
 
-) { }
+        Boolean isActive,
+
+        DoctorDetailReqDto doctorDetails
+) {
+}
