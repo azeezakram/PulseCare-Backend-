@@ -93,6 +93,11 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
         DoctorDetail existing = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor detail with id " + id + " not found"));
 
+        Users user = userRepository.findById(UUID.fromString(data.userId()))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + data.userId()));
+
+        existing.setUser(user);
         existing.setLicenseNo(data.licenseNo());
         Set<Specialization> specializationIds = new HashSet<>(specializationRepository.findAllById(data.specializationIds()));
         existing.setSpecializations(specializationIds);
