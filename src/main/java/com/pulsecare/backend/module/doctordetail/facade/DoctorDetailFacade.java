@@ -31,11 +31,7 @@ public class DoctorDetailFacade {
 
     public DoctorDetailResDto create(DoctorDetailReqDto responseDto) {
         Users user = userService.findById(responseDto.userId());
-        Set<Specialization> specializations = new HashSet<>(
-                specializationService.findAllById(
-                        responseDto.specializationIds()
-                )
-        );
+        Set<Specialization> specializations = specializationService.findAllById(responseDto.specializationIds());
 
         DoctorDetail doctorDetail = new DoctorDetail();
         doctorDetail.setUser(user);
