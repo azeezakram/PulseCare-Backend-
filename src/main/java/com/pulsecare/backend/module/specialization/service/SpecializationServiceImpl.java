@@ -6,7 +6,9 @@ import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.specialization.repository.SpecializationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SpecializationServiceImpl implements SpecializationService {
@@ -59,7 +61,11 @@ public class SpecializationServiceImpl implements SpecializationService {
 
 
     @Override
-    public List<Specialization> findAllById(List<Integer> ids) {
-        return repository.findAllById(ids);
+    public Set<Specialization> findAllById(Set<Integer> ids) {
+        List<Specialization> data = repository.findAllById(ids);
+        if (data.size() != ids.size()) {
+            throw new ResourceNotFoundException("One or more specialization not found");
+        }
+        return new HashSet<>(data);
     }
 }
