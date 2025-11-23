@@ -4,12 +4,11 @@ import com.pulsecare.backend.common.base.service.CreatableService;
 import com.pulsecare.backend.common.base.service.DeletableService;
 import com.pulsecare.backend.common.base.service.FindableService;
 import com.pulsecare.backend.common.base.service.UpdatableService;
-import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailReqDto;
-import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailResDto;
+import com.pulsecare.backend.module.doctordetail.model.DoctorDetail;
 
 public interface DoctorDetailService extends
-        FindableService<Long, DoctorDetailResDto>,
-        CreatableService<DoctorDetailReqDto, DoctorDetailResDto>,
-        UpdatableService<DoctorDetailReqDto, DoctorDetailResDto, Long>,
+        FindableService<Long, DoctorDetail>,
+        CreatableService<DoctorDetail, DoctorDetail>,
+        UpdatableService<DoctorDetail, DoctorDetail, Long>,
         DeletableService<Long> {
 }

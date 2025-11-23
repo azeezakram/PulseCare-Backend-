@@ -3,8 +3,11 @@ package com.pulsecare.backend.module.doctordetail.controller;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailReqDto;
 import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailResDto;
+import com.pulsecare.backend.module.doctordetail.facade.DoctorDetailFacade;
+import com.pulsecare.backend.module.doctordetail.mapper.DoctorDetailMapper;
 import com.pulsecare.backend.module.doctordetail.service.DoctorDetailService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,17 +23,21 @@ import java.util.List;
 public class DoctorDetailControllerImpl implements DoctorDetailController {
 
     private final DoctorDetailService service;
+    private final DoctorDetailFacade facade;
+    private final DoctorDetailMapper mapper;
 
-    public DoctorDetailControllerImpl(DoctorDetailService service) {
+    public DoctorDetailControllerImpl(DoctorDetailService service, DoctorDetailFacade facade,
+                                      @Qualifier("doctorDetailMapperImpl") DoctorDetailMapper mapper) {
         this.service = service;
+        this.facade = facade;
+        this.mapper = mapper;
     }
-
 
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> findById(@PathVariable("id") Long id) {
-        DoctorDetailResDto data = service.findById(id);
+        DoctorDetailResDto data = mapper.toDTO(service.findById(id));
         return ResponseEntity.ok().body(
                 new ResponseBody<>(
                         HttpStatus.OK.value(),
@@ -44,7 +51,9 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<DoctorDetailResDto>>> findAll() {
-        List<DoctorDetailResDto> data = service.findAll();
+        List<DoctorDetailResDto> data = service.findAll().stream()
+                .map(mapper::toDTO)
+                .toList();
 
         return ResponseEntity
                 .ok()
@@ -59,7 +68,7 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> create(@Valid @RequestBody DoctorDetailReqDto data) {
-        DoctorDetailResDto created = service.create(data);
+        DoctorDetailResDto created = facade.create(data);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
@@ -74,7 +83,7 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> update(@Valid @PathVariable("id") Long id,
                                                                      @RequestBody DoctorDetailReqDto data) {
-        DoctorDetailResDto updated = service.update(id, data);
+        DoctorDetailResDto updated = facade.update(data, id);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
