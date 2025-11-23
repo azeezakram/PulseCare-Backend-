@@ -45,7 +45,15 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<DoctorDetailResDto>>> findAll() {
-        return null;
+        List<DoctorDetailResDto> data = service.findAll();
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        data.isEmpty() ? "No data to fetched" : "Doctor details data fetched successfully",
+                        data
+                ));
     }
 
     @Override
