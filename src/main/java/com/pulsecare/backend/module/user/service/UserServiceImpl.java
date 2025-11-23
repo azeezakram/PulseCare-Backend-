@@ -2,7 +2,6 @@ package com.pulsecare.backend.module.user.service;
 
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
-import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.exception.UserInvalidCredentialException;
 import com.pulsecare.backend.module.user.model.Users;
@@ -14,7 +13,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +52,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Users update(String id, Users data) {
+        repository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
+
+        return repository.save(data);
+    }
+
+    @Override
     public void delete(String id) {
         // TODO document why this method is empty
     }
@@ -84,8 +90,4 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public Users update(String id, Users data) {
-        return null;
-    }
 }
