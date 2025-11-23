@@ -1,8 +1,6 @@
 package com.pulsecare.backend.module.user.controller;
 
 import com.pulsecare.backend.common.template.response.ResponseBody;
-import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailResDto;
-import com.pulsecare.backend.module.role.service.RoleService;
 import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserRequestDTO;
 import com.pulsecare.backend.module.user.dto.UserResponseDTO;
@@ -101,14 +99,12 @@ public class UserControllerImpl implements UserController {
     @Override
     @PostMapping("/login")
     public ResponseEntity<ResponseBody<String>> login(@RequestBody LoginRequestDTO data) {
-        String token = service.login(data);
-
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
                         "success",
-                        token
+                        service.login(data)
                 ));
     }
 }
