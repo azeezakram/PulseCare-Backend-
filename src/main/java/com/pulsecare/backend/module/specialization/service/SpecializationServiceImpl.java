@@ -2,27 +2,19 @@ package com.pulsecare.backend.module.specialization.service;
 
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
-import com.pulsecare.backend.module.doctordetail.model.DoctorDetail;
-import com.pulsecare.backend.module.specialization.dto.SpecializationReqDTO;
-import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
-import com.pulsecare.backend.module.specialization.mapper.SpecializationMapper;
 import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.specialization.repository.SpecializationRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SpecializationServiceImpl implements SpecializationService {
 
     private final SpecializationRepository repository;
-    private final SpecializationMapper mapper;
 
-    public SpecializationServiceImpl(SpecializationRepository repository, @Qualifier("specializationMapperImpl") SpecializationMapper mapper) {
+    public SpecializationServiceImpl(SpecializationRepository repository) {
         this.repository = repository;
-        this.mapper = mapper;
     }
 
     @Override
