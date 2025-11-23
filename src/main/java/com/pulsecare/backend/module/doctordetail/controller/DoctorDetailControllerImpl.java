@@ -60,7 +60,14 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> create(@Valid @RequestBody DoctorDetailReqDto data) {
-        return null;
+        DoctorDetailResDto created = service.create(data);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Doctor details created successfully",
+                        created
+                ));
     }
 
     @Override
