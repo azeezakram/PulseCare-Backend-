@@ -10,8 +10,10 @@ import com.pulsecare.backend.module.role.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -67,5 +69,15 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         repository.delete(entity);
+    }
+
+
+    @Override
+    public Set<Role> findAllById(Set<Integer> ids) {
+        List<Role> data = repository.findAllById(ids);
+        if (data.size() != ids.size()) {
+            throw new ResourceNotFoundException("One or more roles not found");
+        }
+        return new HashSet<>(data);
     }
 }

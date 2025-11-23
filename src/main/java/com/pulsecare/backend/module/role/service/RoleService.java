@@ -6,10 +6,14 @@ import com.pulsecare.backend.common.base.service.FindableService;
 import com.pulsecare.backend.common.base.service.UpdatableService;
 import com.pulsecare.backend.module.role.dto.RoleReqDto;
 import com.pulsecare.backend.module.role.dto.RoleResDto;
+import com.pulsecare.backend.module.role.model.Role;
+
+import java.util.Set;
 
 public interface RoleService extends
         FindableService<Integer, RoleResDto>,
         CreatableService<RoleReqDto, RoleResDto>,
         UpdatableService<RoleReqDto, RoleResDto, Integer>,
         DeletableService<Integer> {
+    Set<Role> findAllById(Set<Integer> ids);
 }
