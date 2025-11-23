@@ -7,15 +7,15 @@ import com.pulsecare.backend.module.doctordetail.dto.DoctorDetailResDto;
 import com.pulsecare.backend.module.doctordetail.mapper.DoctorDetailMapper;
 import com.pulsecare.backend.module.doctordetail.model.DoctorDetail;
 import com.pulsecare.backend.module.doctordetail.repository.DoctorDetailRepository;
-import com.pulsecare.backend.module.role.model.Role;
 import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.specialization.repository.SpecializationRepository;
-import com.pulsecare.backend.module.specialization.service.SpecializationService;
+import com.pulsecare.backend.module.user.model.Users;
+import com.pulsecare.backend.module.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class DoctorDetailServiceImpl implements DoctorDetailService {
@@ -23,11 +23,13 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
     private final DoctorDetailRepository repository;
     private final DoctorDetailMapper mapper;
     private final SpecializationRepository specializationRepository;
+    private final UserRepository userRepository;
 
-    public DoctorDetailServiceImpl(DoctorDetailRepository repository, @Qualifier("doctorDetailMapperImpl") DoctorDetailMapper mapper, SpecializationRepository specializationRepository) {
+    public DoctorDetailServiceImpl(DoctorDetailRepository repository, @Qualifier("doctorDetailMapperImpl") DoctorDetailMapper mapper, SpecializationRepository specializationRepository, UserRepository userRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.specializationRepository = specializationRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -48,13 +50,42 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
     }
 
     @Override
+    @Transactional
     public DoctorDetailResDto create(DoctorDetailReqDto data) {
+        // Check if doctor detail already exists
         repository.findByUserIdAndLicenseNo(UUID.fromString(data.userId()), data.licenseNo())
                 .ifPresent(s -> {
-                    throw new ResourceAlreadyExistsException("Doctor detail with this User ID or License No already exists");
+                    throw new ResourceAlreadyExistsException(
+                            "Doctor detail with this User ID or License No already exists");
                 });
-        DoctorDetail entity = repository.save(mapper.toEntity(data));
-        return mapper.toDTO(entity);
+
+//         Fetch the User entity
+        Users user = userRepository.findById(UUID.fromString(data.userId()))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + data.userId()));
+
+        // Fetch the Specialization entities
+        Set<Specialization> specializations = new HashSet<>();
+        if (data.specializationIds() != null && !data.specializationIds().isEmpty()) {
+            specializations = new HashSet<>(
+                    specializationRepository.findAllById(data.specializationIds()));
+
+            // Validate that all specializations were found
+            if (specializations.size() != data.specializationIds().size()) {
+                throw new ResourceNotFoundException(
+                        "One or more specializations not found");
+            }
+        }
+
+        // Create DoctorDetail entity
+        DoctorDetail doctorDetail = new DoctorDetail();
+        doctorDetail.setLicenseNo(data.licenseNo());
+        doctorDetail.setUser(user);
+        doctorDetail.setSpecializations(specializations);
+
+        // Save and return
+        DoctorDetail savedEntity = repository.save(doctorDetail);
+        return mapper.toDTO(savedEntity);
     }
 
     @Override
