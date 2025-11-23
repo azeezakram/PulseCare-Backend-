@@ -1,8 +1,8 @@
 package com.pulsecare.backend.module.user.service;
 
+import com.pulsecare.backend.common.exception.ResourceNotFoundException;
+import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserResponseDTO;
 import com.pulsecare.backend.module.user.exception.UserInvalidCredentialException;
 import com.pulsecare.backend.module.user.model.Users;
 import com.pulsecare.backend.module.user.repository.UserRepository;
@@ -15,23 +15,28 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserRepository repository, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.repository = repository;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
     @Override
     public Users findById(String id) {
-        return null;
+        Users data = repository.findById(UUID.fromString(id)).orElse(null);
+        if (data == null) {
+            throw new ResourceNotFoundException("User with id " + id + " not found");
+        }
+        return data;
     }
 
     @Override
@@ -43,8 +48,6 @@ public class UserServiceImpl implements UserService {
     public Users create(Users data) {
         return null;
     }
-
-
 
     @Override
     public void delete(String id) {
@@ -61,13 +64,13 @@ public class UserServiceImpl implements UserService {
                     )
             );
 
-            Users user = userRepository.findByUsername(data.username());
+            Users user = repository.findByUsername(data.username());
             if (user == null) {
                 throw new UserInvalidCredentialException("User not found");
             }
 
             user.setLastLoginAt(LocalDateTime.now());
-            userRepository.save(user);
+            repository.save(user);
 
             return jwtUtil.generateToken(user);
 
