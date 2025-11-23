@@ -6,12 +6,12 @@ import com.pulsecare.backend.common.base.service.FindableService;
 import com.pulsecare.backend.common.base.service.UpdatableService;
 import com.pulsecare.backend.module.specialization.model.Specialization;
 
-import java.util.List;
+import java.util.Set;
 
 public interface SpecializationService extends
         FindableService<Integer, Specialization>,
         CreatableService<Specialization, Specialization>,
         UpdatableService<Specialization, Specialization, Integer>,
         DeletableService<Integer> {
-    List<Specialization> findAllById(List<Integer> ids);
+    Set<Specialization> findAllById(Set<Integer> ids);
 }
