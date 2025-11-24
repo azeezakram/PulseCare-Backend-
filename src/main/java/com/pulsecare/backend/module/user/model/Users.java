@@ -1,11 +1,12 @@
 package com.pulsecare.backend.module.user.model;
 
-import com.pulsecare.backend.module.role.model.Role;
 import com.pulsecare.backend.module.doctordetail.model.DoctorDetail;
+import com.pulsecare.backend.module.role.model.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,12 +14,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(exclude = "roles")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,31 +30,26 @@ public class Users {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = true, unique = true)
+    @Column(unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = true)
     private String mobileNumber;
 
     //Profile picture attributes
-    @Column(nullable = true)
     private String imageName;
-    @Column(nullable = true)
     private String contentType;
-    @Column(nullable = true)
     @Lob
     private byte[] imageData;
 
+    @CreatedDate
     @Column(nullable = false, updatable = false)
-    @CreationTimestamp
     private LocalDateTime createdAt;
-    @Column(nullable = false, insertable = false)
-    @UpdateTimestamp
+    @LastModifiedDate
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
-//    @Column(insertable = false)
     private LocalDateTime lastLoginAt;
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean isActive;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -65,7 +61,8 @@ public class Users {
     @ToString.Exclude
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private DoctorDetail doctorDetails;
+
 
 }

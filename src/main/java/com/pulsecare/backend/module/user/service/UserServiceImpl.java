@@ -2,7 +2,6 @@ package com.pulsecare.backend.module.user.service;
 
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
-import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.user.dto.LoginRequestDTO;
 import com.pulsecare.backend.module.user.exception.UserInvalidCredentialException;
 import com.pulsecare.backend.module.user.model.Users;
@@ -46,8 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users create(Users data) {
-        if (repository.findByUsername(data.getUsername()) == null)
+        if (repository.findByUsername(data.getUsername()) != null) {
             throw new ResourceAlreadyExistsException("User with this username already exists");
+        }
 
         return repository.save(data);
     }

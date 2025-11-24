@@ -8,6 +8,7 @@ import com.pulsecare.backend.module.user.facade.UserFacade;
 import com.pulsecare.backend.module.user.mapper.UserMapper;
 import com.pulsecare.backend.module.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,7 @@ public class UserControllerImpl implements UserController {
     private final UserFacade facade;
     private final UserMapper mapper;
 
-    public UserControllerImpl(UserService service, UserFacade facade, UserMapper mapper) {
+    public UserControllerImpl(UserService service, UserFacade facade, @Qualifier("userMapperImpl") UserMapper mapper) {
         this.service = service;
         this.facade = facade;
         this.mapper = mapper;
@@ -44,14 +45,16 @@ public class UserControllerImpl implements UserController {
     @GetMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<List<UserResponseDTO>>> findAll() {
+        List<UserResponseDTO> data = service.findAll().stream()
+                .map(mapper::toDTO)
+                .toList();
+        
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
                         "User successfully created",
-                        service.findAll().stream()
-                                .map(mapper::toDTO)
-                                .toList()
+                        data
                 ));
     }
 
