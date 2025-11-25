@@ -14,6 +14,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Component
@@ -35,7 +36,8 @@ public class JwtUtil {
                 .add(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000 ))
+//                .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000 ))  // 30 minutes expiration
+                .expiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(2))) // 2 days expiration
                 .and()
                 .signWith(getKey())
                 .compact();
