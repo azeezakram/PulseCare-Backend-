@@ -36,14 +36,26 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
     @Override
     @Transactional
     public DoctorDetail create(DoctorDetail data) {
-        repository.findByUserIdAndLicenseNo(data.getUser().getId(), data.getLicenseNo())
+
+        // Check license uniqueness
+        repository.findByLicenseNo(data.getLicenseNo())
                 .ifPresent(s -> {
                     throw new ResourceAlreadyExistsException(
-                            "Doctor detail with this User ID or License No already exists");
+                            "License number already taken by another doctor"
+                    );
+                });
+
+        // Optional: ensure 1:1 user-doctorDetail constraint
+        repository.findByUserId(data.getUser().getId())
+                .ifPresent(s -> {
+                    throw new ResourceAlreadyExistsException(
+                            "This user already has a doctor detail profile"
+                    );
                 });
 
         return repository.save(data);
     }
+
 
     @Override
     public DoctorDetail update(Long id, DoctorDetail data) {
