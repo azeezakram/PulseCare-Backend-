@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.resource.ward.dto;
 
+import com.pulsecare.backend.module.resource.department.model.Department;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,4 +37,8 @@ public class Ward {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }
