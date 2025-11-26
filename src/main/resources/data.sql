@@ -102,7 +102,7 @@ VALUES (
            'Nurse',
            'nurse',
            'nurse@pulsecare.com',
-           '$2a$12$wGk9F/dRZgUS9PB9jFdIsiIp5Bl93kKE/Z1VSB2mQ3G.U5m7T7jSy', -- bcrypt: nurse123
+           '$2a$12$9DR.a6thEGLbOClaujtEV.k/mAjeGXT0bGuZtjLV6kkTO/zZsLmNu', -- bcrypt: nurse123
            TRUE,
            NOW(),
            NOW()

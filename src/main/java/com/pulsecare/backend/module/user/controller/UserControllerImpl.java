@@ -37,13 +37,20 @@ public class UserControllerImpl implements UserController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<UserResponseDTO>> findById(@PathVariable("id") String id) {
+        UserResponseDTO data = mapper.toDTO(service.findById(id));
 
-        return null;
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "User fetched successfully",
+                        data
+                ));
     }
 
     @Override
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
     public ResponseEntity<ResponseBody<List<UserResponseDTO>>> findAll() {
         List<UserResponseDTO> data = service.findAll().stream()
                 .map(mapper::toDTO)
@@ -53,7 +60,7 @@ public class UserControllerImpl implements UserController {
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "User successfully created",
+                        "Users fetched successfully",
                         data
                 ));
     }
@@ -66,7 +73,7 @@ public class UserControllerImpl implements UserController {
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "User successfully created",
+                        "User created successfully",
                         facade.createNewUser(data)
                 ));
     }

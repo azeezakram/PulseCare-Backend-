@@ -2,6 +2,7 @@ package com.pulsecare.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,9 +27,13 @@ public class WebSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(
-                                "/api/v1/user/login"
-                        ).permitAll()
+                        .requestMatchers("/api/v1/user/login").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user/**").hasRole("ADMIN")
+
+                        .requestMatchers("/api/v1/user/**").hasAnyRole("ADMIN", "DOCTOR", "NURSE")
+                        .requestMatchers("/api/v1/doctor-detail/**").hasAnyRole("ADMIN", "DOCTOR", "NURSE")
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
