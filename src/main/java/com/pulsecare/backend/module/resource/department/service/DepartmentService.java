@@ -8,7 +8,7 @@ import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
 
 public interface DepartmentService extends
-        FindableService<String, DeptResponseDTO>,
+        FindableService<Integer, DeptResponseDTO>,
         SavableService<DeptRequestDTO, DeptResponseDTO>,
         UpdatableService<DeptRequestDTO, DeptResponseDTO, Integer>,
         DeletableService<Integer> {

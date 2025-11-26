@@ -1,5 +1,7 @@
 package com.pulsecare.backend.module.resource.department.service;
 
+import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
+import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
 import com.pulsecare.backend.module.resource.department.mapper.DepartmentMapper;
@@ -22,8 +24,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DeptResponseDTO findById(String id) {
-        return null;
+    public DeptResponseDTO findById(Integer id) {
+        Department department = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department with id " + id + " not found"));
+
+        return mapper.toDTO(department);
     }
 
     @Override
@@ -41,6 +46,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DeptResponseDTO save(DeptRequestDTO data) {
+        if (repository.findByName(data.name()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Department with name " + data.name() + " already exists");
+        }
+
         Department department = mapper.toEntity(data);
         return mapper.toDTO(repository.save(department));
     }
@@ -54,7 +63,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DeptResponseDTO update(Integer integer, DeptRequestDTO data) {
-        return null;
+    public DeptResponseDTO update(Integer id, DeptRequestDTO data) {
+        Department existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department with id " + id + " not found"));
+
+        if (data.name() != null)
+            existing.setName(data.name());
+
+        return mapper.toDTO(repository.save(existing));
     }
 }

@@ -27,7 +27,14 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> findById(@PathVariable("id") Integer id) {
-        return null;
+        DeptResponseDTO data = service.findById(id);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Department data successfully fetched",
+                        data
+                ));
     }
 
     @Override
@@ -61,12 +68,26 @@ public class DepartmentControllerImpl implements DepartmentController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> update(
             @Valid @PathVariable("id") Integer id, @RequestBody DeptRequestDTO data) {
-        return null;
+        DeptResponseDTO created = service.update(id, data);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Department updated successfully",
+                        created
+                ));
     }
 
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseBody<String>> delete(@PathVariable("id") Integer id) {
-        return null;
+        service.delete(id);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Department deleted successfully",
+                        null
+                ));
     }
 }
