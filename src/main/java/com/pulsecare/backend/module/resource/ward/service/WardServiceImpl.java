@@ -1,6 +1,8 @@
 package com.pulsecare.backend.module.resource.ward.service;
 
+import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.resource.ward.model.Ward;
+import com.pulsecare.backend.module.resource.ward.repository.WardRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,15 +10,16 @@ import java.util.List;
 @Service
 public class WardServiceImpl implements WardService {
 
+    private final WardRepository repository;
 
-    @Override
-    public void delete(Integer id) {
-
+    public WardServiceImpl(WardRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Ward findById(Integer id) {
-        return null;
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found with id: " + id));
     }
 
     @Override
@@ -33,4 +36,10 @@ public class WardServiceImpl implements WardService {
     public Ward update(Integer integer, Ward data) {
         return null;
     }
+
+    @Override
+    public void delete(Integer id) {
+
+    }
+
 }
