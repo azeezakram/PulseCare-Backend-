@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,11 +21,17 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
 
     @Override
     public DoctorDetail findById(Long id) {
-        DoctorDetail data = repository.findById(id).orElse(null);
-        if (data == null) {
-            throw new ResourceNotFoundException("Doctor detail with id " + id + " not found");
-        }
-        return data;
+        return repository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Doctor detail with id " + id + " not found")
+        );
+    }
+
+    @Override
+    public DoctorDetail findByUserId(String userId) {
+        return repository.findByUserId(UUID.fromString(userId))
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Doctor detail with user id " + userId + " not found")
+                );
     }
 
     @Override
@@ -36,64 +41,31 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
 
     @Override
     @Transactional
-    public DoctorDetail create(DoctorDetail data) {
-        repository.findByUserIdAndLicenseNo(data.getUser().getId(), data.getLicenseNo())
-                .ifPresent(s -> {
-                    throw new ResourceAlreadyExistsException(
-                            "Doctor detail with this User ID or License No already exists");
-                });
-
+    public DoctorDetail save(DoctorDetail data) {
         return repository.save(data);
     }
 
     @Override
-    public DoctorDetail update(Long id, DoctorDetail data) {
-        DoctorDetail existingDetail = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor detail with id " + id + " not found"));
-
-        // Only check licenseNo if it is being changed
-        if (data.getLicenseNo() != null && !data.getLicenseNo().equals(existingDetail.getLicenseNo())) {
-            repository.findByLicenseNoAndUserIdNot(data.getLicenseNo(), existingDetail.getUser().getId())
-                    .ifPresent(d -> {
+    public void validateLicenseNoUniqueness(String licenseNo, UUID userId) {
+        repository.findByLicenseNo(licenseNo)
+                .ifPresent(d -> {
+                    if (!d.getUser().getId().equals(userId)) {
                         throw new ResourceAlreadyExistsException(
                                 "License number already taken by another doctor"
                         );
-                    });
-        }
-
-        existingDetail.setLicenseNo(data.getLicenseNo());
-        existingDetail.setSpecializations(data.getSpecializations());
-
-        return repository.save(existingDetail);
+                    }
+                });
     }
 
     @Override
-    public DoctorDetail update(String userId, DoctorDetail data) {
-        UUID userUUID = UUID.fromString(userId);
-
-        // Fetch existing doctor detail for the user
-        DoctorDetail existingDetail = repository.findByUserId(userUUID)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Doctor detail with user id " + userId + " not found"
-                ));
-
-        // Only check licenseNo if it is being changed
-        if (data.getLicenseNo() != null && !data.getLicenseNo().equals(existingDetail.getLicenseNo())) {
-            repository.findByLicenseNoAndUserIdNot(data.getLicenseNo(), userUUID)
-                    .ifPresent(d -> {
-                        throw new ResourceAlreadyExistsException(
-                                "License number already taken by another doctor"
-                        );
-                    });
-        }
-
-        existingDetail.setLicenseNo(data.getLicenseNo());
-        existingDetail.setSpecializations(data.getSpecializations());
-
-        return repository.save(existingDetail);
-
+    public void validateAlreadyHasDoctorDetail(UUID userId) {
+        repository.findByUserId(userId)
+                .ifPresent(d -> {
+                    throw new ResourceAlreadyExistsException(
+                            "This user already has a doctor detail profile"
+                    );
+                });
     }
-
 
     @Override
     public void delete(Long id) {
@@ -103,12 +75,4 @@ public class DoctorDetailServiceImpl implements DoctorDetailService {
         repository.delete(entity);
     }
 
-    @Override
-    public DoctorDetail findByUserId(String userId) {
-        DoctorDetail data = repository.findByUserId(UUID.fromString(userId)).orElse(null);
-        if (data == null) {
-            throw new ResourceNotFoundException("Doctor detail with user id " + userId + " not found");
-        }
-        return data;
-    }
 }
