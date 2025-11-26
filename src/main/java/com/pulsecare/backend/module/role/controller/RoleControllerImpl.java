@@ -41,7 +41,7 @@ public class RoleControllerImpl implements RoleController {
 
     @Override
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<RoleResDto>>> findAll() {
         List<RoleResDto> data = service.findAll();
 
@@ -71,7 +71,7 @@ public class RoleControllerImpl implements RoleController {
 
     @Override
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<RoleResDto>> update(@Valid @PathVariable("id") Integer id,
                                                            @RequestBody RoleReqDto data) {
         RoleResDto updated = service.update(id, data);

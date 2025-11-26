@@ -79,7 +79,7 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
 
     @Override
     @PostMapping("/")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> create(@Valid @RequestBody DoctorDetailReqDto data) {
         DoctorDetailResDto created = facade.createNewDoctorDetail(data);
         return ResponseEntity

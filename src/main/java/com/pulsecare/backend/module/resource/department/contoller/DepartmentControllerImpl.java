@@ -7,6 +7,7 @@ import com.pulsecare.backend.module.resource.department.service.DepartmentServic
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> findById(@PathVariable("id") Integer id) {
         DeptResponseDTO data = service.findById(id);
         return ResponseEntity
@@ -39,6 +41,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @GetMapping("/")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<DeptResponseDTO>>> findAll() {
         List<DeptResponseDTO> data = service.findAll();
 
@@ -53,6 +56,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> create(@RequestBody DeptRequestDTO data) {
         DeptResponseDTO created = service.save(data);
         return ResponseEntity
@@ -66,6 +70,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> update(
             @Valid @PathVariable("id") Integer id, @RequestBody DeptRequestDTO data) {
         DeptResponseDTO created = service.update(id, data);
@@ -80,6 +85,7 @@ public class DepartmentControllerImpl implements DepartmentController {
 
     @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<String>> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity
