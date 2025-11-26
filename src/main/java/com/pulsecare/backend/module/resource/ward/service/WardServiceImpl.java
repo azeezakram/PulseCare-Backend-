@@ -24,7 +24,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public List<Ward> findAll() {
-        return List.of();
+        return repository.findAll();
     }
 
     @Override
