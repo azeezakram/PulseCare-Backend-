@@ -45,21 +45,6 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-//    @Override
-//    public Users update(String id, Users data) {
-//        Users existingById = repository.findById(UUID.fromString(id))
-//                .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
-//
-//        Users existByUsername = repository.findByUsername(data.getUsername());
-//        if (existByUsername != null && !existByUsername.getId().equals(existingById.getId())) {
-//            throw new ResourceAlreadyExistsException("User with this username already exists");
-//        }
-//
-//        UserUtil.addDataToEntity(data, existingById);
-//
-//        return repository.save(existingById);
-//    }
-
     @Override
     public void delete(String id) {
         Users entity = repository.findById(UUID.fromString(id))

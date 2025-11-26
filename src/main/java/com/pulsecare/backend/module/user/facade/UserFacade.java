@@ -27,26 +27,6 @@ public class UserFacade {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-//    @Transactional
-//    public UserResponseDTO createNewUser(UserRequestDTO data) {
-//        Users userEntity = userMapper.toEntity(data);
-//        Set<Role> roles = roleService.findAllById(data.roles());
-//        userEntity.setRoles(roles);
-//
-//        Users savedUser = userService.create(userEntity);
-//
-////        boolean isDoctor = UserUtil.isRoleAvailable(roles, "DOCTOR");
-////        if (isDoctor) {
-////            DoctorDetail newDoctorDetail = setDoctorDetails(data, savedUser);
-////            newDoctorDetail = doctorDetailService.create(newDoctorDetail);
-////            savedUser.setDoctorDetails(newDoctorDetail);
-////        }
-//
-//        return userMapper.toDTO(savedUser);
-//    }
-
-
 @Transactional
 public UserResponseDTO createNewUser(UserRequestDTO data) {
     userService.validateUsernameDoesNotExist(data.username());
@@ -89,44 +69,5 @@ public UserResponseDTO createNewUser(UserRequestDTO data) {
         Users updatedUser = userService.save(existingUser);
         return userMapper.toDTO(updatedUser);
     }
-
-
-//    @Transactional
-//    public UserResponseDTO updateUser(UserRequestDTO data, String id) {
-//        Users userEntity = userMapper.toEntity(data);
-//        Set<Role> roles = roleService.findAllById(data.roles());
-//        userEntity.setRoles(roles);
-//        userEntity.setId(UUID.fromString(id));
-//
-//        Users updatedUser = userService.update(id, userEntity);
-//
-////        boolean isDoctor = UserUtil.isRoleAvailable(roles, "DOCTOR");
-////
-////        if (isDoctor) {
-////            DoctorDetail updatedDoctorDetail = setDoctorDetails(data, updatedUser);
-////            updatedDoctorDetail = doctorDetailService.update(id, updatedDoctorDetail);
-////            updatedUser.setDoctorDetails(updatedDoctorDetail);
-////        }
-//
-//        return userMapper.toDTO(updatedUser);
-//    }
-
-//    private DoctorDetail setDoctorDetails(UserRequestDTO data, Users savedOrUpdatedUser) {
-//        DoctorDetail doctorDetail = new DoctorDetail();
-//        doctorDetail.setUser(savedOrUpdatedUser);
-//
-//        if (data.doctorDetails() != null) {
-//            doctorDetail.setLicenseNo(data.doctorDetails().licenseNo());
-//            doctorDetail.setSpecializations(
-//                    specializationService.findAllById(data.doctorDetails().specializationIds())
-//            );
-//        } else {
-//            doctorDetail.setLicenseNo(null);
-//            doctorDetail.setSpecializations(null);
-//        }
-//
-//        return doctorDetail;
-//    }
-
 
 }
