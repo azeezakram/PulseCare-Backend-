@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.resource.ward.service;
 
+import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.resource.ward.model.Ward;
 import com.pulsecare.backend.module.resource.ward.repository.WardRepository;
@@ -38,6 +39,23 @@ public class WardServiceImpl implements WardService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));
 
         repository.delete(entity);
+    }
+
+    public void validateNameUniqueness(String wardName, Integer departmentId) {
+        repository.findByName(wardName)
+                .ifPresent(ward -> {
+                    if (ward.getName().equals(wardName) && ward.getDepartment().getId().equals(departmentId)) {
+                        throw new ResourceAlreadyExistsException("Ward with this name already exists in the department");
+                    }
+                });
+    }
+
+    public void validateWardNameDoesNotExist(String wardName) {
+        repository.findByName(wardName).ifPresent(
+                ward -> {
+                    throw new ResourceAlreadyExistsException("Ward with name '" + wardName + "' already exists");
+                }
+        );
     }
 
 }
