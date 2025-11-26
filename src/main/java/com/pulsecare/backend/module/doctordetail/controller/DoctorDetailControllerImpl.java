@@ -92,7 +92,7 @@ public class DoctorDetailControllerImpl implements DoctorDetailController {
     }
 
     @Override
-    @PutMapping("/u/{userId}")
+    @PutMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<ResponseBody<DoctorDetailResDto>> update(@PathVariable("userId") String userId,
                                                                    @RequestBody DoctorDetailReqDto data) {
