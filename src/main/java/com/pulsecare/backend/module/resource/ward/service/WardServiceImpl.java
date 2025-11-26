@@ -34,7 +34,10 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public void delete(Integer id) {
+        Ward entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found"));
 
+        repository.delete(entity);
     }
 
 }
