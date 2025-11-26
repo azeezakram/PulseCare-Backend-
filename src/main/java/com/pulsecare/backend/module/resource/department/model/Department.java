@@ -1,6 +1,6 @@
 package com.pulsecare.backend.module.resource.department.model;
 
-import com.pulsecare.backend.module.resource.ward.dto.Ward;
+import com.pulsecare.backend.module.resource.ward.model.Ward;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

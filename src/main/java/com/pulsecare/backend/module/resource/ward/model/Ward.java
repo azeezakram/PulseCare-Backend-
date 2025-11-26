@@ -1,4 +1,4 @@
-package com.pulsecare.backend.module.resource.ward.dto;
+package com.pulsecare.backend.module.resource.ward.model;
 
 import com.pulsecare.backend.module.resource.department.model.Department;
 import jakarta.persistence.*;
