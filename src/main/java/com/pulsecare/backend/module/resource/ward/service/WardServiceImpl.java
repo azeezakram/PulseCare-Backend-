@@ -41,6 +41,7 @@ public class WardServiceImpl implements WardService {
         repository.delete(entity);
     }
 
+    @Override
     public void validateNameUniqueness(String wardName, Integer departmentId) {
         repository.findByName(wardName)
                 .ifPresent(ward -> {
@@ -48,14 +49,6 @@ public class WardServiceImpl implements WardService {
                         throw new ResourceAlreadyExistsException("Ward with this name already exists in the department");
                     }
                 });
-    }
-
-    public void validateWardNameDoesNotExist(String wardName) {
-        repository.findByName(wardName).ifPresent(
-                ward -> {
-                    throw new ResourceAlreadyExistsException("Ward with name '" + wardName + "' already exists");
-                }
-        );
     }
 
 }
