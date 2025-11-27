@@ -15,43 +15,30 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final DepartmentMapper mapper;
     private final DepartmentRepository repository;
 
-    public DepartmentServiceImpl(@Qualifier("departmentMapperImpl") DepartmentMapper mapper, DepartmentRepository repository) {
-        this.mapper = mapper;
+    public DepartmentServiceImpl(DepartmentRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public DeptResponseDTO findById(Integer id) {
-        Department department = repository.findById(id)
+    public Department findById(Integer id) {
+        return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department with id " + id + " not found"));
-
-        return mapper.toDTO(department);
     }
 
     @Override
-    public List<DeptResponseDTO> findAll() {
-        List<Department> departments = repository.findAll();
-
-        if (departments.isEmpty()) {
-            return List.of();
-        }
-
-        return departments.stream()
-                .map(mapper::toDTO)
-                .toList();
+    public List<Department> findAll() {
+        return repository.findAll();
     }
 
     @Override
-    public DeptResponseDTO save(DeptRequestDTO data) {
-        if (repository.findByName(data.name()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Department with name " + data.name() + " already exists");
+    public Department save(Department data) {
+        if (repository.findByName(data.getName()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Department with name " + data.getName() + " already exists");
         }
 
-        Department department = mapper.toEntity(data);
-        return mapper.toDTO(repository.save(department));
+        return repository.save(data);
     }
 
     @Override
@@ -60,16 +47,5 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .orElseThrow(() -> new RuntimeException("Department with id " + id + " not found"));
 
         repository.delete(existing);
-    }
-
-    @Override
-    public DeptResponseDTO update(Integer id, DeptRequestDTO data) {
-        Department existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department with id " + id + " not found"));
-
-        if (data.name() != null)
-            existing.setName(data.name());
-
-        return mapper.toDTO(repository.save(existing));
     }
 }
