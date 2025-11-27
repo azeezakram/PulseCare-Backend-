@@ -42,17 +42,21 @@ public class WardServiceImpl implements WardService {
     }
 
     @Override
-    public void validateWardNameAndDepartmentIDUniqueness(String wardName, Integer departmentId) {
+    public void validateWardNameAndDepartmentIDUniqueness(String wardName, Integer departmentId, Integer wardId) {
         repository.findByNameAndDepartmentId(wardName, departmentId)
-                .ifPresent(ward -> {
-                    throw new ResourceAlreadyExistsException("Ward with this name already exists in the department");
-
+                .ifPresent(existingWard -> {
+                    if (!existingWard.getId().equals(wardId)) {
+                        throw new ResourceAlreadyExistsException(
+                                "Ward with this name already exists in the department"
+                        );
+                    }
                 });
     }
 
+
     @Override
     public Ward findWardByWardIdAndDepartmentId(Integer wardId, Integer departmentId) {
-        return repository.findWardByWardIdAndDepartmentId(wardId, departmentId)
+        return repository.findWardByIdAndDepartmentId(wardId, departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ward not found with id: " + wardId + " in department id: " + departmentId));
     }
 
