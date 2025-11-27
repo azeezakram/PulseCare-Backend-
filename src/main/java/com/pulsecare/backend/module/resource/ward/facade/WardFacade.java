@@ -1,15 +1,43 @@
 package com.pulsecare.backend.module.resource.ward.facade;
 
+import com.pulsecare.backend.module.resource.department.model.Department;
+import com.pulsecare.backend.module.resource.department.service.DepartmentService;
+import com.pulsecare.backend.module.resource.ward.dto.WardReqDTO;
 import com.pulsecare.backend.module.resource.ward.dto.WardResDTO;
+import com.pulsecare.backend.module.resource.ward.maper.WardMapper;
+import com.pulsecare.backend.module.resource.ward.model.Ward;
+import com.pulsecare.backend.module.resource.ward.service.WardService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WardFacade {
 
+    private final WardService wardService;
+    private final DepartmentService departmentService;
+    private final WardMapper mapper;
+
+    public WardFacade(WardService wardService, DepartmentService departmentService, @Qualifier("wardMapperImpl") WardMapper mapper) {
+        this.wardService = wardService;
+        this.departmentService = departmentService;
+        this.mapper = mapper;
+    }
+
     @Transactional
-    public WardResDTO createWard(WardResDTO dto) {
-        return null;
+    public WardResDTO createWard(WardReqDTO dto) {
+        wardService.validateWardNameAndDepartmentIDUniqueness(dto.name(), dto.departmentId());
+
+        Ward wardEntity = mapper.toEntity(dto);
+
+        if (dto.departmentId() != null) {
+            Department department =  departmentService.findById(dto.departmentId());
+            wardEntity.setDepartment(department);
+        }
+        
+        Ward savedWard = wardService.save(wardEntity);
+
+        return mapper.toDTO(savedWard);
     }
 
     @Transactional
