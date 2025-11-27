@@ -50,4 +50,10 @@ public class WardServiceImpl implements WardService {
                 });
     }
 
+    @Override
+    public Ward findWardByWardIdAndDepartmentId(Integer wardId, Integer departmentId) {
+        return repository.findWardByWardIdAndDepartmentId(wardId, departmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ward not found with id: " + wardId + " in department id: " + departmentId));
+    }
+
 }

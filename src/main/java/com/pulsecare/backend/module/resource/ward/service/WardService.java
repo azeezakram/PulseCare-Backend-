@@ -10,4 +10,5 @@ public interface WardService extends
         SavableService<Ward, Ward>,
         DeletableService<Integer> {
     void validateWardNameAndDepartmentIDUniqueness(String wardName, Integer departmentId);
+    Ward findWardByWardIdAndDepartmentId(Integer wardId, Integer departmentId);
 }
