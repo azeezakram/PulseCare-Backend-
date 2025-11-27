@@ -41,8 +41,23 @@ public class WardFacade {
     }
 
     @Transactional
-    public WardResDTO updateWard(WardResDTO dto) {
-        return null;
+    public WardResDTO updateWard(WardReqDTO dto, Integer departmentId, Integer wardId) {
+        Ward existingWard = wardService.findWardByWardIdAndDepartmentId(wardId, departmentId);
+
+        if (dto.name() != null) {
+            wardService.validateWardNameAndDepartmentIDUniqueness(dto.name(), departmentId);
+        }
+
+        mapper.updateEntity(dto, existingWard);
+
+        if (dto.departmentId() != null) {
+            Department department =  departmentService.findById(dto.departmentId());
+            existingWard.setDepartment(department);
+        }
+
+        Ward updatedWard = wardService.save(existingWard);
+
+        return mapper.toDTO(updatedWard);
     }
 
 }
