@@ -38,8 +38,17 @@ public class WardControllerImpl implements WardController {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<WardResDTO>> findById(Integer id) {
-        return null;
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
+    public ResponseEntity<ResponseBody<WardResDTO>> findById(@PathVariable("id") Integer id) {
+        WardResDTO data = mapper.toDTO(service.findById(id));
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Ward data fetched successfully",
+                        data
+                ));
     }
 
     @Override
