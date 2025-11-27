@@ -3,8 +3,11 @@ package com.pulsecare.backend.module.resource.department.contoller;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
+import com.pulsecare.backend.module.resource.department.facade.DepartmentFacade;
+import com.pulsecare.backend.module.resource.department.mapper.DepartmentMapper;
 import com.pulsecare.backend.module.resource.department.service.DepartmentService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,16 +23,20 @@ import java.util.List;
 public class DepartmentControllerImpl implements DepartmentController {
 
     private final DepartmentService service;
+    private final DepartmentFacade facade;
+    private final DepartmentMapper mapper;
 
-    public DepartmentControllerImpl(DepartmentService service) {
+    public DepartmentControllerImpl(DepartmentService service, DepartmentFacade facade, @Qualifier("departmentMapperImpl") DepartmentMapper mapper) {
         this.service = service;
+        this.facade = facade;
+        this.mapper = mapper;
     }
 
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> findById(@PathVariable("id") Integer id) {
-        DeptResponseDTO data = service.findById(id);
+        DeptResponseDTO data = mapper.toDTO(service.findById(id));
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
@@ -43,7 +50,10 @@ public class DepartmentControllerImpl implements DepartmentController {
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<List<DeptResponseDTO>>> findAll() {
-        List<DeptResponseDTO> data = service.findAll();
+        List<DeptResponseDTO> data = service.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
 
         return ResponseEntity
                 .ok()
@@ -57,8 +67,8 @@ public class DepartmentControllerImpl implements DepartmentController {
     @Override
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseBody<DeptResponseDTO>> create(@RequestBody DeptRequestDTO data) {
-        DeptResponseDTO created = service.save(data);
+    public ResponseEntity<ResponseBody<DeptResponseDTO>> create(@Valid @RequestBody DeptRequestDTO data) {
+        DeptResponseDTO created = facade.createDepartment(data);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
@@ -72,8 +82,9 @@ public class DepartmentControllerImpl implements DepartmentController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseBody<DeptResponseDTO>> update(
-            @Valid @PathVariable("id") Integer id, @RequestBody DeptRequestDTO data) {
-        DeptResponseDTO created = service.update(id, data);
+            @PathVariable("id") Integer id, @Valid @RequestBody DeptRequestDTO data) {
+
+        DeptResponseDTO created = facade.updateDepartment(data, id);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(

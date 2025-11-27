@@ -4,5 +4,5 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 
 public interface UpdatableController<T, R, ID> {
-    ResponseEntity<R> update(@Valid ID id, T data);
+    ResponseEntity<R> update(ID id, @Valid T data);
 }

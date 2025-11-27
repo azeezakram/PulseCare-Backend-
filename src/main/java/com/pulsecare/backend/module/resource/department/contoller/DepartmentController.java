@@ -7,13 +7,6 @@ import com.pulsecare.backend.common.base.controller.UpdatableController;
 import com.pulsecare.backend.common.template.response.ResponseBody;
 import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
 import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
-import com.pulsecare.backend.module.user.dto.UserRequestDTO;
-import com.pulsecare.backend.module.user.dto.UserResponseDTO;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
