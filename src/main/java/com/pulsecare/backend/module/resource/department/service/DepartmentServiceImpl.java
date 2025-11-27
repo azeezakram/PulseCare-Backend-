@@ -2,12 +2,8 @@ package com.pulsecare.backend.module.resource.department.service;
 
 import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
-import com.pulsecare.backend.module.resource.department.dto.DeptRequestDTO;
-import com.pulsecare.backend.module.resource.department.dto.DeptResponseDTO;
-import com.pulsecare.backend.module.resource.department.mapper.DepartmentMapper;
 import com.pulsecare.backend.module.resource.department.model.Department;
 import com.pulsecare.backend.module.resource.department.repository.DepartmentRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +48,14 @@ public class DepartmentServiceImpl implements DepartmentService {
                     if (!department.getId().equals(departmentId)) {
                         throw new ResourceAlreadyExistsException("Department with this name already exists");
                     }
+                });
+    }
+
+    @Override
+    public void validateNameDoesNotExist(String departmentName) {
+        repository.findByName(departmentName)
+                .ifPresent(department -> {
+                    throw new ResourceAlreadyExistsException("Department with name" + departmentName + " already exists");
                 });
     }
 
