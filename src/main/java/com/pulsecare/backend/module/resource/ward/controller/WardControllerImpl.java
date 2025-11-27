@@ -70,8 +70,17 @@ public class WardControllerImpl implements WardController {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<WardResDTO>> create(WardReqDTO data) {
-        return null;
+    @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseBody<WardResDTO>> create(@Valid @RequestBody WardReqDTO data) {
+        WardResDTO created = facade.createWard(data);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Ward created successfully",
+                        created
+                ));
     }
 
     @Override
