@@ -34,10 +34,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department save(Department data) {
-        if (repository.findByName(data.getName()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Department with name " + data.getName() + " already exists");
-        }
-
         return repository.save(data);
     }
 
@@ -48,4 +44,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         repository.delete(existing);
     }
+
+    @Override
+    public void validateNameUniqueness(String departmentName, Integer departmentId) {
+        repository.findByName(departmentName)
+                .ifPresent(department -> {
+                    if (!department.getId().equals(departmentId)) {
+                        throw new ResourceAlreadyExistsException("Department with this name already exists");
+                    }
+                });
+    }
+
 }
