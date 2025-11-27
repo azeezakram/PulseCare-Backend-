@@ -33,6 +33,7 @@ public class Department {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @ToString.Exclude
     private Set<Ward> wards;
 
 }
