@@ -1,0 +1,17 @@
+package com.pulsecare.backend.module.triage.mapper;
+
+import com.pulsecare.backend.module.triage.dto.TriagePredictionReqDTO;
+import com.pulsecare.backend.module.triage.dto.TriagePredictionResDTO;
+import com.pulsecare.backend.module.triage.dto.TriageReqDTO;
+import com.pulsecare.backend.module.triage.dto.TriageResDTO;
+import com.pulsecare.backend.module.triage.model.Triage;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface TriageMapper {
+    Triage toEntity(TriageReqDTO dto);
+    TriageResDTO toDTO(Triage entity);
+
+    Triage toPredEntity(TriagePredictionResDTO dto);
+    TriagePredictionReqDTO toPredDTO(Triage entity);
+}
