@@ -61,7 +61,14 @@ public class TriageControllerImpl implements TriageController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<TriageResDTO>> create(@RequestBody TriageReqDTO data) {
-        return null;
+        TriageResDTO created = service.save(data);
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Triage created successfully",
+                        created
+                ));
     }
 
     @Override
