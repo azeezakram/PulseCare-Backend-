@@ -61,13 +61,12 @@ public class TriageControllerImpl implements TriageController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<TriageResDTO>> create(@RequestBody TriageReqDTO data) {
-        TriageResDTO created = service.save(data);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
                         "Triage created successfully",
-                        created
+                        service.save(data)
                 ));
     }
 
@@ -75,13 +74,12 @@ public class TriageControllerImpl implements TriageController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseBody<TriageResDTO>> update(@PathVariable("id") Long id, @RequestBody TriageReqDTO data) {
-        TriageResDTO updated = service.update(id, data);
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
                         "Triage updated successfully",
-                        updated
+                        service.update(id, data)
                 ));
     }
 
@@ -103,6 +101,12 @@ public class TriageControllerImpl implements TriageController {
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<TriageResDTO>> predict(@RequestBody TriageReqDTO dto) {
-        return null;
+        return ResponseEntity
+                .ok()
+                .body(new ResponseBody<>(
+                        HttpStatus.OK.value(),
+                        "Triage predicted successfully",
+                        service.predict(dto)
+                ));
     }
 }
