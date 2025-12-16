@@ -1,6 +1,7 @@
 package com.pulsecare.backend.module.triage.service;
 
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
+import com.pulsecare.backend.module.specialization.model.Specialization;
 import com.pulsecare.backend.module.triage.dto.TriageReqDTO;
 import com.pulsecare.backend.module.triage.dto.TriageResDTO;
 import com.pulsecare.backend.module.triage.mapper.TriageMapper;
@@ -55,14 +56,18 @@ public class TriageServiceImpl implements TriageService {
     }
 
     @Override
+    public void delete(Long id) {
+        Triage entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Triage not found"));
+
+        repository.delete(entity);
+    }
+
+    @Override
     public Triage predict(Triage dto) {
         return null;
     }
 
-    @Override
-    public void delete(Long id) {
-
-    }
 
 
 }
