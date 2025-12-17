@@ -22,7 +22,6 @@ public class Triage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
     // ========== Basic Categorical Features ==========
@@ -93,8 +92,11 @@ public class Triage {
     private Boolean isTachypnea;
 
     // ========== Target Label (0 = Critical, 1 = Non-Critical) ==========
-    @Column(name = "triage_level", nullable = false)
+    @Column(name = "triage_level")
     private Integer triageLevel;
+
+    @Column(name = "severity")
+    private String severity;
 
     // ========== Audit Fields ==========
     @CreationTimestamp
