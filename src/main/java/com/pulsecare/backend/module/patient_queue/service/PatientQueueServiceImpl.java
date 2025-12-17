@@ -6,7 +6,6 @@ import com.pulsecare.backend.module.patient_queue.dto.PatientQueueResDTO;
 import com.pulsecare.backend.module.patient_queue.mapper.PatientQueueMapper;
 import com.pulsecare.backend.module.patient_queue.model.PatientQueue;
 import com.pulsecare.backend.module.patient_queue.repository.PatientQueueRepository;
-import com.pulsecare.backend.module.triage.model.Triage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +32,9 @@ public class PatientQueueServiceImpl implements PatientQueueService {
 
     @Override
     public List<PatientQueueResDTO> findAll() {
-        return List.of();
+        return repository.findAll().stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     @Override
