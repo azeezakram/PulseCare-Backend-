@@ -1,15 +1,9 @@
 package com.pulsecare.backend.module.triage.controller;
 
 import com.pulsecare.backend.common.template.response.ResponseBody;
-import com.pulsecare.backend.module.specialization.dto.SpecializationReqDTO;
-import com.pulsecare.backend.module.specialization.dto.SpecializationResDTO;
-import com.pulsecare.backend.module.specialization.mapper.SpecializationMapper;
-import com.pulsecare.backend.module.specialization.service.SpecializationService;
 import com.pulsecare.backend.module.triage.dto.TriageReqDTO;
 import com.pulsecare.backend.module.triage.dto.TriageResDTO;
 import com.pulsecare.backend.module.triage.service.TriageService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -98,7 +92,7 @@ public class TriageControllerImpl implements TriageController {
     }
 
     @Override
-    @PostMapping("/")
+    @PostMapping("/predict")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
     public ResponseEntity<ResponseBody<TriageResDTO>> predict(@RequestBody TriageReqDTO dto) {
         return ResponseEntity
