@@ -37,6 +37,7 @@ public record TriageResDTO(
 
         // ========== Target Label (0 = Critical, 1 = Non-Critical) ==========
         Integer triageLevel,
+        String severity,
 
         // ========== Metadata ==========
         LocalDateTime createdAt,

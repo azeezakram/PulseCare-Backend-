@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 public record TriageReqDTO(
 
-        @NotEmpty(message = "Sex is required")
+        @NotEmpty(message = "Name is required")
         String name,
 
         // ========== Basic Categorical Features (Required) ==========

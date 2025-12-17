@@ -1,7 +1,7 @@
 package com.pulsecare.backend.module.triage.dto;
 
 public record TriagePredictionResDTO(
-        Integer predictedTriageLevel, // 0 = Critical, 1 = Non-Critical
+        Integer triageLevel, // 0 = Critical, 1 = Non-Critical
         Double confidence,
         String severity, // "CRITICAL" or "NON_CRITICAL"
 
