@@ -90,7 +90,7 @@ public class TriageServiceImpl implements TriageService {
                         TriagePredictionResDTO.class
                 );
         Triage predicted = mapper.toPredEntity(response.getBody());
-
+        predicted.setName(data.name());
         return mapper.toDTO(repository.save(predicted));
     }
 
