@@ -1,4 +1,4 @@
-package com.pulsecare.backend.module.queue.enums;
+package com.pulsecare.backend.module.patient_queue.enums;
 
 public enum QueueStatus {
     WAITING,
