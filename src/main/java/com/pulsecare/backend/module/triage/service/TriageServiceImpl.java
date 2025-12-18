@@ -33,11 +33,19 @@ public class TriageServiceImpl implements TriageService {
 
     @Override
     public TriageResDTO findById(Long id) {
-        Triage data = repository.findById(id).orElse(null);
-        if (data == null) {
-            throw new ResourceNotFoundException("Triage with id " + id + " not found");
-        }
+        Triage data = repository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Triage with id " + id + " not found")
+        );
+
         return mapper.toDTO(data);
+    }
+
+    @Override
+    public Triage findEntityById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Triage with id " + id + " not found")
+                );
     }
 
     @Override
@@ -70,6 +78,7 @@ public class TriageServiceImpl implements TriageService {
 
         repository.delete(entity);
     }
+
 
     @Override
     public TriageResDTO predict(TriageReqDTO data) {
