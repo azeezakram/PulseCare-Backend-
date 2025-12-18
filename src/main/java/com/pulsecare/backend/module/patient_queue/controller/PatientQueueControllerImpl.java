@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/queue")
+@RequestMapping("/api/v1/patient_queue")
 @Validated
 public class PatientQueueControllerImpl implements PatientQueueController {
 
