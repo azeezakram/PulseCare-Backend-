@@ -2,6 +2,8 @@ package com.pulsecare.backend.module.patient_queue.mapper;
 
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueReqDTO;
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueResDTO;
+import com.pulsecare.backend.module.patient_queue.enums.QueuePriority;
+import com.pulsecare.backend.module.patient_queue.enums.QueueStatus;
 import com.pulsecare.backend.module.patient_queue.model.PatientQueue;
 import org.mapstruct.*;
 
@@ -9,9 +11,10 @@ import org.mapstruct.*;
 public interface PatientQueueMapper {
 
     @Mapping(source = "triage.id", target = "triageId")
-    @Mapping(source = "triage.triageLevel", target = "triageLevel")
+    @Mapping(target = "triageLevel", source = ".", qualifiedByName = "mapTriageLevel")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "priority", target = "priority")
+    @Mapping(target = "admitted", source = "status", qualifiedByName = "mapAdmitted")
     PatientQueueResDTO toDTO(PatientQueue entity);
 
     @Mapping(target = "id", ignore = true)
@@ -33,5 +36,27 @@ public interface PatientQueueMapper {
             PatientQueueReqDTO dto,
             @MappingTarget PatientQueue entity
     );
+
+    @Named("mapTriageLevel")
+    default Integer mapTriageLevel(PatientQueue queue) {
+        if (queue.getTriage() != null) return queue.getTriage().getTriageLevel();
+        if (queue.getPriority() != null) {
+            if (queue.getPriority() == QueuePriority.CRITICAL) {
+                return 0;
+            } else {
+                if (queue.getPriority() == QueuePriority.NON_CRITICAL) return 1;
+                return 2;
+            }
+        }
+        return 2;
+    }
+
+    @Named("mapAdmitted")
+    default Boolean mapAdmitted(QueueStatus status) {
+        if (status == QueueStatus.ADMITTED) return true;
+        if (status == QueueStatus.OUTPATIENT || status == QueueStatus.CANCELLED) return false;
+        return null; // WAITING or unknown
+    }
+
 }
 
