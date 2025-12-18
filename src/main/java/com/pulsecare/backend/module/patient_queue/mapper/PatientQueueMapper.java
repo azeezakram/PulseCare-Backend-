@@ -55,7 +55,7 @@ public interface PatientQueueMapper {
     default Boolean mapAdmitted(QueueStatus status) {
         if (status == QueueStatus.ADMITTED) return true;
         if (status == QueueStatus.OUTPATIENT || status == QueueStatus.CANCELLED) return false;
-        return null; // WAITING or unknown
+        return null;
     }
 
 }
