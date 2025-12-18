@@ -8,6 +8,7 @@ import com.pulsecare.backend.module.patient_queue.enums.QueueStatus;
 import com.pulsecare.backend.module.patient_queue.mapper.PatientQueueMapper;
 import com.pulsecare.backend.module.patient_queue.model.PatientQueue;
 import com.pulsecare.backend.module.patient_queue.repository.PatientQueueRepository;
+import com.pulsecare.backend.module.patient_queue.utils.PatientQueueUtils;
 import com.pulsecare.backend.module.triage.model.Triage;
 import com.pulsecare.backend.module.triage.service.TriageService;
 import org.springframework.stereotype.Service;
@@ -69,9 +70,32 @@ public class PatientQueueServiceImpl implements PatientQueueService {
     }
 
     @Override
-    public PatientQueueResDTO update(Long aLong, PatientQueueReqDTO data) {
-        return null;
+    @Transactional
+    public PatientQueueResDTO update(Long id, PatientQueueReqDTO data) {
+        PatientQueue existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Queue not found"));
+
+        mapper.updateEntity(data, existing);
+
+        if (data.triageId() != null) {
+            Triage triage = triageService.findEntityById(data.triageId());
+            existing.setTriage(triage);
+
+            existing.setPriority(
+                    triage.getTriageLevel() == 0 ? QueuePriority.CRITICAL : QueuePriority.NON_CRITICAL
+            );
+        } else if (data.priority() != null) {
+            existing.setPriority(data.priority());
+        }
+
+        if (data.status() != null) {
+            PatientQueueUtils.validateStatusTransition(existing.getStatus(), data.status());
+            existing.setStatus(data.status());
+        }
+
+        return mapper.toDTO(repository.save(existing));
     }
+
 
     @Override
     public void delete(Long id) {
