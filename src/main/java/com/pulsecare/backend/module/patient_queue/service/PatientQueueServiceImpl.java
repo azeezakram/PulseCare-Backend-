@@ -3,10 +3,15 @@ package com.pulsecare.backend.module.patient_queue.service;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueReqDTO;
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueResDTO;
+import com.pulsecare.backend.module.patient_queue.enums.QueuePriority;
+import com.pulsecare.backend.module.patient_queue.enums.QueueStatus;
 import com.pulsecare.backend.module.patient_queue.mapper.PatientQueueMapper;
 import com.pulsecare.backend.module.patient_queue.model.PatientQueue;
 import com.pulsecare.backend.module.patient_queue.repository.PatientQueueRepository;
+import com.pulsecare.backend.module.triage.model.Triage;
+import com.pulsecare.backend.module.triage.service.TriageService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,10 +20,12 @@ public class PatientQueueServiceImpl implements PatientQueueService {
 
     private final PatientQueueRepository repository;
     private final PatientQueueMapper mapper;
+    private final TriageService triageService;
 
-    public PatientQueueServiceImpl(PatientQueueRepository repository, PatientQueueMapper mapper) {
+    public PatientQueueServiceImpl(PatientQueueRepository repository, PatientQueueMapper mapper, TriageService triageService) {
         this.repository = repository;
         this.mapper = mapper;
+        this.triageService = triageService;
     }
 
     @Override
@@ -38,8 +45,27 @@ public class PatientQueueServiceImpl implements PatientQueueService {
     }
 
     @Override
+    @Transactional
     public PatientQueueResDTO save(PatientQueueReqDTO data) {
-        return null;
+        PatientQueue entity = mapper.toEntity(data);
+
+        if (data.triageId() != null) {
+            Triage exist = triageService.findEntityById(data.triageId());
+
+            entity.setTriage(exist);
+
+            entity.setPriority(
+                    exist.getTriageLevel() == 0
+                            ? QueuePriority.CRITICAL
+                            : QueuePriority.NON_CRITICAL
+            );
+        } else {
+            entity.setPriority(QueuePriority.NORMAL);
+        }
+
+        entity.setStatus(QueueStatus.WAITING);
+
+        return mapper.toDTO(repository.save(entity));
     }
 
     @Override
