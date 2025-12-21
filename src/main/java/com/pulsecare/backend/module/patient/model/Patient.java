@@ -28,11 +28,12 @@ public class Patient {
     @Column(nullable = false)
     private String fullName;
 
+    @Column(nullable = false)
     private Integer age;
 
     private String bloodGroup;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String nic;
 
     @Column(length = 15)
