@@ -27,12 +27,10 @@ import java.util.List;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository repository;
-    private final TriageService triageService;
     private final PatientMapper mapper;
 
-    public PatientServiceImpl(PatientRepository repository, TriageService triageService, @Qualifier("patientMapper") PatientMapper mapper) {
+    public PatientServiceImpl(PatientRepository repository, @Qualifier("patientMapper") PatientMapper mapper) {
         this.repository = repository;
-        this.triageService = triageService;
         this.mapper = mapper;
     }
 
@@ -71,8 +69,24 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientResDTO update(Long aLong, PatientReqDTO data) {
-        return null;
+    public PatientResDTO update(Long id, PatientReqDTO data) {
+
+        Patient existing = findEntityById(id);
+
+        if (data.nic() != null) {
+            Patient byNic = repository.findByNic(data.nic());
+            if (byNic != null && !byNic.getId().equals(id)) {
+                throw new ResourceAlreadyExistsException(
+                        "Patient with NIC " + data.nic() + " already exists"
+                );
+            }
+        }
+
+        mapper.updateEntity(data, existing);
+
+        Patient updated = repository.save(existing);
+
+        return mapper.toDTO(updated);
     }
 
     @Override
