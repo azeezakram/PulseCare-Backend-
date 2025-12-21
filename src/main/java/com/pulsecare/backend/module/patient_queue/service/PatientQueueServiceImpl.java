@@ -11,6 +11,7 @@ import com.pulsecare.backend.module.patient_queue.repository.PatientQueueReposit
 import com.pulsecare.backend.module.patient_queue.utils.PatientQueueUtils;
 import com.pulsecare.backend.module.triage.model.Triage;
 import com.pulsecare.backend.module.triage.service.TriageService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,13 @@ public class PatientQueueServiceImpl implements PatientQueueService {
     private final PatientQueueMapper mapper;
     private final TriageService triageService;
 
-    public PatientQueueServiceImpl(PatientQueueRepository repository, PatientQueueMapper mapper, TriageService triageService) {
+    public PatientQueueServiceImpl(PatientQueueRepository repository, @Qualifier("patientQueueMapper") PatientQueueMapper mapper, TriageService triageService) {
         this.repository = repository;
         this.mapper = mapper;
         this.triageService = triageService;
     }
 
+    
     @Override
     public PatientQueueResDTO findById(Long id) {
         PatientQueue data = repository.findById(id).orElse(null);
