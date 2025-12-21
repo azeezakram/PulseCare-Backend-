@@ -67,7 +67,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void delete(Long id) {
+        Patient entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
+        repository.delete(entity);
     }
 
 
