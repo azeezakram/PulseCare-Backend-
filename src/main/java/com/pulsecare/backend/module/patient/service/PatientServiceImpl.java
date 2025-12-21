@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.patient.service;
 
+import com.pulsecare.backend.common.exception.ResourceAlreadyExistsException;
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
 import com.pulsecare.backend.module.patient.dto.PatientReqDTO;
 import com.pulsecare.backend.module.patient.dto.PatientResDTO;
@@ -57,7 +58,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResDTO save(PatientReqDTO data) {
-        return null;
+
+        if (data.nic() != null && repository.findByNic(data.nic()) != null) {
+            throw new ResourceAlreadyExistsException(
+                    "Patient with NIC " + data.nic() + " already exists"
+            );
+        }
+
+        Patient saved = repository.save(mapper.toEntity(data));
+
+        return mapper.toDTO(saved);
     }
 
     @Override
