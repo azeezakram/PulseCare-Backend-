@@ -33,11 +33,15 @@ public class PatientQueueServiceImpl implements PatientQueueService {
     
     @Override
     public PatientQueueResDTO findById(Long id) {
-        PatientQueue data = repository.findById(id).orElse(null);
-        if (data == null) {
-            throw new ResourceNotFoundException("Queue with id " + id + " not found");
-        }
-        return mapper.toDTO(data);
+        return mapper.toDTO(
+                repository.findById(id)
+                        .orElseThrow(() ->  new ResourceNotFoundException("Queue with id " + id + " not found")));
+    }
+
+    @Override
+    public PatientQueue findEntityById(Long id) {
+        return repository.findById(id)
+                        .orElseThrow(() ->  new ResourceNotFoundException("Queue with id " + id + " not found"));
     }
 
     @Override
@@ -106,4 +110,5 @@ public class PatientQueueServiceImpl implements PatientQueueService {
 
         repository.delete(entity);
     }
+
 }
