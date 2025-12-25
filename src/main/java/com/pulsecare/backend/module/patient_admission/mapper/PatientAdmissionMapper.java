@@ -11,8 +11,7 @@ public interface PatientAdmissionMapper {
     @Mapping(source = "patient.id", target = "patientId")
     @Mapping(source = "patient.fullName", target = "patientName")
     @Mapping(source = "patientQueue.id", target = "queueId")
-    @Mapping(source = "ward.id", target = "wardId")
-    @Mapping(source = "ward.name", target = "wardName")
+    @Mapping(source = "bed.id", target = "bedId")
     @Mapping(source = "status", target = "status")
     PatientAdmissionResDTO toDTO(PatientAdmission entity);
 
@@ -20,7 +19,7 @@ public interface PatientAdmissionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "patientQueue", ignore = true)
-    @Mapping(target = "ward", ignore = true)
+    @Mapping(target = "bed", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "admittedAt", ignore = true)
     @Mapping(target = "dischargedAt", ignore = true)
@@ -31,7 +30,7 @@ public interface PatientAdmissionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "patientQueue", ignore = true)
-    @Mapping(target = "ward", ignore = true)
+    @Mapping(target = "bed", ignore = true)
     @Mapping(target = "admittedAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
 
