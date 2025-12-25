@@ -3,7 +3,7 @@ package com.pulsecare.backend.module.patient_admission.model;
 import com.pulsecare.backend.module.patient.model.Patient;
 import com.pulsecare.backend.module.patient_admission.enums.PatientAdmissionStatus;
 import com.pulsecare.backend.module.patient_queue.model.PatientQueue;
-import com.pulsecare.backend.module.resource.ward.model.Ward;
+import com.pulsecare.backend.module.resource.bed.model.Bed;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,7 +12,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "patient_admission")
+@Table(
+        name = "patient_admission",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "bed_id")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,12 +37,9 @@ public class PatientAdmission {
     @JoinColumn(name = "queue_id")
     private PatientQueue patientQueue;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ward_id", nullable = false)
-    private Ward ward;
-
-    @Column(nullable = false)
-    private Integer bedNo;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bed_id", nullable = false)
+    private Bed bed;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

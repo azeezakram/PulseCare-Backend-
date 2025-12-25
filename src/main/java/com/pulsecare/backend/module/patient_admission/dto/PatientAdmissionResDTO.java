@@ -14,7 +14,7 @@ public record PatientAdmissionResDTO(
         Integer wardId,
         String wardName,
 
-        Integer bedNo,
+        Integer bedId,
 
         String status,
         LocalDateTime admittedAt,
