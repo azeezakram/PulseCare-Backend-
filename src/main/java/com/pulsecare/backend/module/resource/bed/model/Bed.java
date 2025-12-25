@@ -1,5 +1,6 @@
 package com.pulsecare.backend.module.resource.bed.model;
 
+import com.pulsecare.backend.module.patient_admission.model.PatientAdmission;
 import com.pulsecare.backend.module.resource.ward.model.Ward;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"ward"})
 public class Bed {
 
     @Id
