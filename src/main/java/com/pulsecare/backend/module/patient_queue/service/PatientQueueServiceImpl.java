@@ -1,6 +1,8 @@
 package com.pulsecare.backend.module.patient_queue.service;
 
 import com.pulsecare.backend.common.exception.ResourceNotFoundException;
+import com.pulsecare.backend.module.patient.model.Patient;
+import com.pulsecare.backend.module.patient.service.PatientService;
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueReqDTO;
 import com.pulsecare.backend.module.patient_queue.dto.PatientQueueResDTO;
 import com.pulsecare.backend.module.patient_queue.enums.QueuePriority;
@@ -23,11 +25,13 @@ public class PatientQueueServiceImpl implements PatientQueueService {
     private final PatientQueueRepository repository;
     private final PatientQueueMapper mapper;
     private final TriageService triageService;
+    private final PatientService patientService;
 
-    public PatientQueueServiceImpl(PatientQueueRepository repository, @Qualifier("patientQueueMapperImpl") PatientQueueMapper mapper, TriageService triageService) {
+    public PatientQueueServiceImpl(PatientQueueRepository repository, @Qualifier("patientQueueMapperImpl") PatientQueueMapper mapper, TriageService triageService, PatientService patientService) {
         this.repository = repository;
         this.mapper = mapper;
         this.triageService = triageService;
+        this.patientService = patientService;
     }
 
     
@@ -70,6 +74,9 @@ public class PatientQueueServiceImpl implements PatientQueueService {
             entity.setPriority(QueuePriority.NORMAL);
         }
 
+        Patient patient = patientService.findEntityById(entity.getId());
+        entity.setPatient(patient);
+
         entity.setStatus(QueueStatus.WAITING);
 
         return mapper.toDTO(repository.save(entity));
@@ -97,6 +104,11 @@ public class PatientQueueServiceImpl implements PatientQueueService {
         if (data.status() != null) {
             PatientQueueUtils.validateStatusTransition(existing.getStatus(), data.status());
             existing.setStatus(data.status());
+        }
+
+        if (data.patientId() != null) {
+            Patient patient = patientService.findEntityById(data.patientId());
+            existing.setPatient(patient);
         }
 
         return mapper.toDTO(repository.save(existing));
