@@ -37,7 +37,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public PrescriptionDetailResDTO findWithDetailById(Long id) {
-        return null;
+        return mapper.toDetailDTO(
+                prescriptionRepository.findById(id)
+                        .orElseThrow(() ->  new ResourceNotFoundException("Patient admission with id " + id + " not found"))
+        );
     }
 
     @Override
