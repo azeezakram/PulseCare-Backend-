@@ -118,7 +118,7 @@ public class PatientAdmissionServiceImpl implements PatientAdmissionService {
             throw new IllegalStateException("Cannot update a discharged admission");
         }
 
-        // ---- Bed change ----
+        // Bed change
         if (data.bedId() != null &&
                 !data.bedId().equals(existing.getBed().getId())) {
 
@@ -144,7 +144,7 @@ public class PatientAdmissionServiceImpl implements PatientAdmissionService {
             }
         }
 
-        // ---- Discharge ----
+        // Discharge
         if (data.status() == PatientAdmissionStatus.DISCHARGED) {
 
             existing.setStatus(PatientAdmissionStatus.DISCHARGED);

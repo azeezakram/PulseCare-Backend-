@@ -14,12 +14,12 @@ public interface PrescriptionMapper {
 
     @Mapping(source = "admission.id", target = "admissionId")
     @Mapping(source = "patientQueue.id", target = "queueId")
-    @Mapping(target = "doctorName", expression = "java(entity.doctor.getFirstName() + \" \" + entity.doctor.getLastName())")
+    @Mapping(target = "doctorName", expression = "java(entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName())")
     PrescriptionSummaryResDTO toSummaryDTO(Prescription entity);
 
     @Mapping(source = "admission.id", target = "admissionId")
     @Mapping(source = "patientQueue.id", target = "queueId")
-    @Mapping(target = "doctorName", expression = "java(entity.doctor.getFirstName() + \" \" + entity.doctor.getLastName())")
+    @Mapping(target = "doctorName", expression = "java(entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName())")
     @Mapping(target = "items", ignore = true)
     PrescriptionDetailResDTO toDetailDTO(Prescription entity);
 
