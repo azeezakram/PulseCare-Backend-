@@ -51,7 +51,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Override
     public List<PrescriptionSummaryResDTO> findAll() {
-        return List.of();
+        return prescriptionRepository.findAll().stream()
+                .map(mapper::toSummaryDTO)
+                .toList();
     }
 
     @Override
