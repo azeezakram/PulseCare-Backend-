@@ -1,6 +1,7 @@
 package com.pulsecare.backend.module.prescription.dto;
 
 public record PrescriptionItemReqDTO(
+        Long id,
         Long prescriptionId,
         String medicineName,
         String dosage,
