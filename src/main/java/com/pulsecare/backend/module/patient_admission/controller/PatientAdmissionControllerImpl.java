@@ -1,9 +1,9 @@
-package com.pulsecare.backend.module.patient_queue.controller;
+package com.pulsecare.backend.module.patient_admission.controller;
 
 import com.pulsecare.backend.common.template.response.ResponseBody;
-import com.pulsecare.backend.module.patient_queue.dto.PatientQueueReqDTO;
-import com.pulsecare.backend.module.patient_queue.dto.PatientQueueResDTO;
-import com.pulsecare.backend.module.patient_queue.service.PatientQueueService;
+import com.pulsecare.backend.module.patient_admission.dto.PatientAdmissionReqDTO;
+import com.pulsecare.backend.module.patient_admission.dto.PatientAdmissionResDTO;
+import com.pulsecare.backend.module.patient_admission.service.PatientAdmissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,24 +14,24 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1/patient-queue")
+@RequestMapping("/api/v1/patient-admission")
 @Validated
-public class PatientQueueControllerImpl implements PatientQueueController {
+public class PatientAdmissionControllerImpl implements PatientAdmissionController {
 
-    private final PatientQueueService service;
+    private final PatientAdmissionService service;
 
-    public PatientQueueControllerImpl(PatientQueueService service) {
+    public PatientAdmissionControllerImpl(PatientAdmissionService service) {
         this.service = service;
     }
 
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
-    public ResponseEntity<ResponseBody<PatientQueueResDTO>> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseBody<PatientAdmissionResDTO>> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(
                 new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "Queue with id %d fetched successfully".formatted(id),
+                        "Patient admission with id %d fetched successfully".formatted(id),
                         service.findById(id)
                 )
         );
@@ -40,13 +40,13 @@ public class PatientQueueControllerImpl implements PatientQueueController {
     @Override
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
-    public ResponseEntity<ResponseBody<List<PatientQueueResDTO>>> findAll() {
-        List<PatientQueueResDTO> data = service.findAll();
+    public ResponseEntity<ResponseBody<List<PatientAdmissionResDTO>>> findAll() {
+        List<PatientAdmissionResDTO> data = service.findAll();
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        data.isEmpty() ? "No data to fetched" : "Queue data fetched successfully",
+                        data.isEmpty() ? "No data to fetched" : "Patient admission data fetched successfully",
                         data
                 ));
     }
@@ -54,12 +54,12 @@ public class PatientQueueControllerImpl implements PatientQueueController {
     @Override
     @PostMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
-    public ResponseEntity<ResponseBody<PatientQueueResDTO>> create(@RequestBody PatientQueueReqDTO data) {
+    public ResponseEntity<ResponseBody<PatientAdmissionResDTO>> create(@RequestBody PatientAdmissionReqDTO data) {
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "Queue created successfully",
+                        "Patient admission created successfully",
                         service.save(data)
                 ));
     }
@@ -67,12 +67,12 @@ public class PatientQueueControllerImpl implements PatientQueueController {
     @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')")
-    public ResponseEntity<ResponseBody<PatientQueueResDTO>> update(@PathVariable("id") Long id, @RequestBody PatientQueueReqDTO data) {
+    public ResponseEntity<ResponseBody<PatientAdmissionResDTO>> update(@PathVariable("id") Long id, @RequestBody PatientAdmissionReqDTO data) {
         return ResponseEntity
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "Queue updated successfully",
+                        "Patient admission updated successfully",
                         service.update(id, data)
                 ));
     }
@@ -86,7 +86,7 @@ public class PatientQueueControllerImpl implements PatientQueueController {
                 .ok()
                 .body(new ResponseBody<>(
                         HttpStatus.OK.value(),
-                        "Queue deleted successfully",
+                        "Patient admission deleted successfully",
                         null
                 ));
     }
