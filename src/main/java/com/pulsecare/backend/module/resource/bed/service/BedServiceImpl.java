@@ -38,7 +38,7 @@ public class BedServiceImpl implements BedService {
     @Override
     public BedResDTO findByBedNoAndWardId(String bedNo, Integer wardId) {
         return mapper.toDTO(
-                repository.findBYBedNoAndWard_Id(bedNo, wardId)
+                repository.findByBedNoAndWard_Id(bedNo, wardId)
                         .orElseThrow(() ->  new ResourceNotFoundException("Bed with Bed No " + bedNo + " not found in ward " + wardId)));
     }
 
@@ -135,13 +135,13 @@ public class BedServiceImpl implements BedService {
     private void validateBedNoUniqueness(String bedNo, Integer wardId, Long bedId, String type) {
         if (bedNo != null) {
             if (type.equalsIgnoreCase("new")) {
-                repository.findBYBedNoAndWard_Id(bedNo, wardId).ifPresent(i -> {
+                repository.findByBedNoAndWard_Id(bedNo, wardId).ifPresent(i -> {
                     throw new ResourceAlreadyExistsException(
                             "Bed with Bed No " + bedNo + " already exists in this ward"
                     );
                 });
             } else if (type.equalsIgnoreCase("existing")) {
-                Bed byBedNo = repository.findBYBedNoAndWard_Id(bedNo, wardId).orElse(null);
+                Bed byBedNo = repository.findByBedNoAndWard_Id(bedNo, wardId).orElse(null);
                 if (byBedNo != null && !byBedNo.getId().equals(bedId)) {
                     throw new ResourceAlreadyExistsException(
                             "Bed with Bed No " + bedNo + " already exists in this ward"

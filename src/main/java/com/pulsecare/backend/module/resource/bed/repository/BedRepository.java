@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface BedRepository extends JpaRepository<Bed, Long> {
-    Optional<Bed> findBYBedNoAndWard_Id(String bedNo, Integer wardId);
+    Optional<Bed> findByBedNoAndWard_Id(String bedNo, Integer wardId);
 }
