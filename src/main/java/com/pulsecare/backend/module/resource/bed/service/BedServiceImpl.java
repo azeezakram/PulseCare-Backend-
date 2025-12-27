@@ -59,11 +59,7 @@ public class BedServiceImpl implements BedService {
     @Transactional
     public BedResDTO save(BedReqDTO data) {
 
-        if (data.bedNo() != null && repository.findBYBedNoAndWard_Id(data.bedNo(), data.wardId()).isPresent()) {
-            throw new ResourceAlreadyExistsException(
-                    "Bed with Bed No " + data.bedNo() + " already exists in this ward"
-            );
-        }
+        validateBedNoUniqueness(data.bedNo(), data.wardId(), null, "new");
 
         Ward ward = wardService.findById(data.wardId());
 
@@ -83,21 +79,43 @@ public class BedServiceImpl implements BedService {
 
     @Override
     @Transactional
-    public BedResDTO update(Long id, BedReqDTO data) {
+    public List<BedResDTO> addBedsToWard(Integer wardId, List<BedReqDTO> beds) {
+        Ward ward = wardService.findById(wardId);
 
-        if (data.bedNo() != null) {
-            Bed byBedNo = repository.findBYBedNoAndWard_Id(data.bedNo(), data.wardId()).orElse(null);
-            if (byBedNo != null && !byBedNo.getId().equals(id)) {
-                throw new ResourceAlreadyExistsException(
-                        "Bed with Bed No " + data.bedNo() + " already exists in this ward"
-                );
+        List<Bed> bedEntities = beds.stream().map(bedDto -> {
+            Bed bed = mapper.toEntity(bedDto);
+            bed.setWard(ward);
+
+            if (bedDto.bedNo() != null) {
+                validateBedNoUniqueness(bedDto.bedNo(), wardId, null, "new");
+                bed.setBedNo(bedDto.bedNo());
+            }
+            return bed;
+        }).toList();
+
+        List<Bed> savedBeds = repository.saveAll(bedEntities);
+
+        for (Bed bed : savedBeds) {
+            if (bed.getBedNo() == null) {
+                bed.setBedNo(ward.getName().substring(0, 2).toUpperCase() + "-" + bed.getId());
             }
         }
 
+        savedBeds = repository.saveAll(savedBeds);
+
+        return savedBeds.stream()
+                .map(mapper::toDTO)
+                .toList();
+    }
+
+
+    @Override
+    @Transactional
+    public BedResDTO update(Long id, BedReqDTO data) {
+        validateBedNoUniqueness(data.bedNo(), data.wardId(), id, "existing");
+
         Bed existing = findEntityById(id);
-
         mapper.updateEntity(data, existing);
-
         existing.setWard(wardService.findById(data.wardId()));
 
         Bed updated = repository.save(existing);
@@ -106,11 +124,31 @@ public class BedServiceImpl implements BedService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Bed entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bed not found"));
 
         repository.delete(entity);
+    }
+
+    private void validateBedNoUniqueness(String bedNo, Integer wardId, Long bedId, String type) {
+        if (bedNo != null) {
+            if (type.equalsIgnoreCase("new")) {
+                repository.findBYBedNoAndWard_Id(bedNo, wardId).ifPresent(i -> {
+                    throw new ResourceAlreadyExistsException(
+                            "Bed with Bed No " + bedNo + " already exists in this ward"
+                    );
+                });
+            } else if (type.equalsIgnoreCase("existing")) {
+                Bed byBedNo = repository.findBYBedNoAndWard_Id(bedNo, wardId).orElse(null);
+                if (byBedNo != null && !byBedNo.getId().equals(bedId)) {
+                    throw new ResourceAlreadyExistsException(
+                            "Bed with Bed No " + bedNo + " already exists in this ward"
+                    );
+                }
+            }
+        }
     }
 
 

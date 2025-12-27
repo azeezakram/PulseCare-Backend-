@@ -8,6 +8,8 @@ import com.pulsecare.backend.module.resource.bed.dto.BedReqDTO;
 import com.pulsecare.backend.module.resource.bed.dto.BedResDTO;
 import com.pulsecare.backend.module.resource.bed.model.Bed;
 
+import java.util.List;
+
 public interface BedService extends
         FindableService<Long, BedResDTO>,
         SavableService<BedReqDTO, BedResDTO>,
@@ -15,4 +17,5 @@ public interface BedService extends
         DeletableService<Long> {
     Bed findEntityById(Long id);
     BedResDTO findByBedNoAndWardId(String bedNo, Integer wardId);
+    List<BedResDTO> addBedsToWard(Integer wardId, List<BedReqDTO> beds);
 }
