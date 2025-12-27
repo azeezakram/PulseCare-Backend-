@@ -17,5 +17,5 @@ public interface BedService extends
         DeletableService<Long> {
     Bed findEntityById(Long id);
     BedResDTO findByBedNoAndWardId(String bedNo, Integer wardId);
-    List<BedResDTO> addBedsToWard(Integer wardId, List<BedReqDTO> beds);
+    List<BedResDTO> batchSave(Integer wardId, List<BedReqDTO> beds);
 }

@@ -79,10 +79,10 @@ public class BedServiceImpl implements BedService {
 
     @Override
     @Transactional
-    public List<BedResDTO> addBedsToWard(Integer wardId, List<BedReqDTO> beds) {
+    public List<BedResDTO> batchSave(Integer wardId, List<BedReqDTO> data) {
         Ward ward = wardService.findById(wardId);
 
-        List<Bed> bedEntities = beds.stream().map(bedDto -> {
+        List<Bed> bedEntities = data.stream().map(bedDto -> {
             Bed bed = mapper.toEntity(bedDto);
             bed.setWard(ward);
 

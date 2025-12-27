@@ -1,6 +1,5 @@
 package com.pulsecare.backend.module.resource.bed.model;
 
-import com.pulsecare.backend.module.patient_admission.model.PatientAdmission;
 import com.pulsecare.backend.module.resource.ward.model.Ward;
 import jakarta.persistence.*;
 import lombok.*;
