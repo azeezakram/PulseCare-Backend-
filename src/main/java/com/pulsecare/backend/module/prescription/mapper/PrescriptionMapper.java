@@ -17,11 +17,10 @@ public interface PrescriptionMapper {
     @Mapping(target = "doctorName", expression = "java(entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName())")
     PrescriptionSummaryResDTO toSummaryDTO(Prescription entity);
 
-    @Mapping(source = "admission.id", target = "admissionId")
-    @Mapping(source = "patientQueue.id", target = "queueId")
-    @Mapping(target = "doctorName", expression = "java(entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName())")
-    @Mapping(target = "items", ignore = true)
-    PrescriptionDetailResDTO toDetailDTO(Prescription entity);
+    @Mapping(source = "entity.admission.id", target = "admissionId")
+    @Mapping(source = "entity.patientQueue.id", target = "queueId")
+    @Mapping(target = "entity.doctorName", expression = "java(entity.getDoctor().getFirstName() + \" \" + entity.getDoctor().getLastName())")
+    PrescriptionDetailResDTO toDetailDTO(Prescription entity, List<PrescriptionItemResDTO> items);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "doctor", ignore = true)
